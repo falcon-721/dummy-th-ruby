@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.2
+  - 2.2.3
 
 branches:
   except:
@@ -19,14 +19,9 @@ before_script:
   - psql -c 'create database th_demo_test;' -U postgres
   - cp config/database.travis.yml config/database.yml
   - cp config/secrets.travis.yml config/secrets.yml
-  - bundle exec rake db:migrate
-  - rackup -s puma -E production
+  - bundle exec rake db:setup
+  - 'bundle exec rackup -s puma -E production private_pub.ru &'
   - sleep 3
 
 gemfile:
   - Gemfile
-
-matrix:
-  include:
-    - rvm: 2.2.3
-      gemfile: Gemfile5
