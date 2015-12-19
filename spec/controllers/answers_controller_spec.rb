@@ -82,10 +82,11 @@ RSpec.describe AnswersController, type: :controller do
         let!(:answer_1) { create(:answer, question: question, best: true) }
         let!(:answer_2) { create(:answer, question: question) }
 
-        it 'change best attr for answer_1' do
+        it 'change best attr for answer_1', :aggregate_failures do
           post :best, id: answer_2, question_id: question, format: :js
           answer_1.reload
           expect(answer_1.best).to_not be true
+          expect(answer_2.reload.best).to be true
         end
       end
     end
@@ -174,7 +175,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'have votes sum' do
         post :vote_minus, question_id: question, id: another_answer
-        expect(another_answer.votes_sum).to eq -1
+        expect(another_answer.votes_sum).to eq(-1)
       end
 
       context 'double vote' do
@@ -184,6 +185,11 @@ RSpec.describe AnswersController, type: :controller do
             post :vote_minus, question_id: question, id: another_answer
           }.to_not change(another_answer.votes, :count)
         end
+      end
+
+      it 'responds with JSON object' do
+        post :vote_minus, question_id: question, id: another_answer
+        expect(response.body).to be_json_eql(another_answer.id).at_path('voted_to_id')
       end
     end
 

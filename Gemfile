@@ -48,8 +48,6 @@ group :development, :test do
   gem 'faker'
   gem 'timecop'
   gem 'factory_girl_rails'
-  gem 'rubocop', require: false
-  gem 'rubocop-rspec', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
@@ -66,11 +64,18 @@ group :test do
   gem 'database_cleaner'
   gem 'email_spec'
   gem 'json_spec'
+  gem 'fuubar'
+  gem 'rspec-page-regression'
 end
 
 group :development do
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
   gem 'spring'
   gem 'spring-commands-rspec'
+  gem 'guard-bundler', require: false
+  gem 'guard-rails', require: false
   gem 'guard-rspec', require: false
-  gem 'guard-spring'
+  gem 'guard-spring', require: false
+  gem 'terminal-notifier-guard', require: false
 end

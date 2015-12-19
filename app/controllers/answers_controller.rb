@@ -10,8 +10,9 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.create(answer_params.merge(user_id: current_user.id))
-    if @answer.valid?
+    @answer = @question.answers.new(answer_params)
+    @answer.user = current_user
+    if @answer.save
       PrivatePub.publish_to(
         "/questions/#{@question.id}/answers",
         post:
@@ -33,6 +34,7 @@ class AnswersController < ApplicationController
 
   def best
     @question = @answer.question
+    # @answer.best = true
     @answer.make_best if @question.user_id == current_user.id
   end
 
