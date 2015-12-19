@@ -2,6 +2,9 @@ language: ruby
 rvm:
   - 2.2.3
 
+notifications:
+  email: false
+
 branches:
   except:
     - production
@@ -22,6 +25,9 @@ before_script:
   - bundle exec rake db:setup
   - 'bundle exec rackup -s puma -E production private_pub.ru &'
   - sleep 3
+
+script: 
+  - bundle exec rspec --tag ~visual
 
 gemfile:
   - Gemfile
