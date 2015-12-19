@@ -1,0 +1,43 @@
+div.question {
+  padding: 5px 20px;
+
+  .question-header {
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  p {
+    padding: 10px 0;
+  }
+
+  .question-controls {
+    border-top: 1px solid #e5e5e5;
+
+    ul {
+      padding-left: 0px;
+      li {
+        display: inline-block;
+        padding: 0 5px 0 0;
+      }
+    }
+  }
+}
+
+div.answers {
+  padding: 5px 20px;
+
+  div#new-answer-form {
+    padding-top: 20px;
+    margin-top: 30px;
+    border-top: 1px solid #e5e5e5;
+  }
+}
+
+.votes {
+  p {
+    font-size: 18px;
+    float: left;
+    padding: 10px !important;
+  }
+}
+
+div#edit-question-form-container { display: none; }

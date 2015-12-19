@@ -1,0 +1,13 @@
+.comments-container {
+  .comments-form {
+    margin-left: 50px;
+  }
+
+  .comments-list {
+    div[id^='comment_'] {
+      padding: 5px 10px 5px 30px;
+      margin: 5px 0px 5px 20px;
+      border-bottom: 1px solid #c2c2c2;
+    }
+  }
+}

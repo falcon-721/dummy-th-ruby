@@ -1,0 +1,24 @@
+div.question
+  = render 'question_block'
+
+-if @question.answers.any?
+  .answers data={question_id: "#{@question.id}"}
+    .answers-list
+      = render 'answers'
+
+    - if user_signed_in?
+      div#new-answer-form
+        h3 New answer
+        = form_for [@question, @answer], remote: true do |f|
+          p= f.label :body, 'Answer body'
+          p= f.text_area :body
+
+          p Attachments:
+          = f.fields_for :attachments do |a|
+            = render 'shared/attachment_fields', f: a
+          .links
+            = link_to_add_association 'add file', f, :attachments, partial: 'shared/attachment_fields'
+
+          p= f.submit 'Create Answer'
+
+= subscribe_to "/questions/#{@question.id}/answers"

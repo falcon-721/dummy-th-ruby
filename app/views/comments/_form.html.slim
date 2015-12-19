@@ -1,0 +1,17 @@
+- if current_user
+  .comments-form
+    = link_to 'Add comment'
+
+    - if commentable.is_a?(Answer)
+      = form_for [commentable.question, commentable, comment], remote: true do |f|
+        = f.hidden_field :commentable, value: commentable.class.name
+        = f.label :body
+        = f.text_field :body
+        = f.submit 'Create comment'
+
+    - if commentable.is_a?(Question)
+      = form_for [commentable, comment], remote: true do |f|
+        = f.hidden_field :commentable, value: commentable.class.name
+        = f.label :body
+        = f.text_field :body
+        = f.submit 'Create comment'

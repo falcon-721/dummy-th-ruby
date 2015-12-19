@@ -1,0 +1,23 @@
+.question-header
+  h3= @question.title
+
+p= @question.body
+- if @question.attachments.any?
+  = render 'shared/attached_files', files: @question.attachments
+
+.votes-container
+  = render partial: 'shared/votes', locals: { voted_to: @question }
+
+- if current_user && current_user.id == @question.user_id
+  .question-controls
+    ul.clear
+      li
+        = link_to 'Edit', '', class: 'edit-question-link'
+      li
+        = link_to 'Delete question', @question, method: :delete
+
+  div#edit-question-form-container
+    div#validation-errors
+    = render partial: 'form', locals: { submit_text: 'Save', remote: true }
+
+= render 'comments/list', commentable: @question, comment: @question.comments.build

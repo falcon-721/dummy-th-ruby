@@ -1,0 +1,9 @@
+.comments-container
+  .comments-list
+    - if commentable.comments.any?
+      h4 Comments
+      - commentable.comments.each do |comment|
+        - if comment.id
+          = render partial: comment, comment: comment
+
+  = render partial: 'comments/form', locals: { commentable: commentable, comment: comment }

@@ -1,0 +1,4 @@
+<% if @answer.destroyed? %>
+  $('p.notice').text('Your answer deleted.');
+  $('div#<%= dom_id @answer %>').remove();
+<% end %>

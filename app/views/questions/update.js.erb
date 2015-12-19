@@ -1,0 +1,9 @@
+<% if @question.valid? %>
+  <% if remotipart_submitted? %>
+    $('div.question').html("<%= j "#{render('question_block')}" %>");
+  <% else %>
+    $('div.question').html('<%= j render "question_block" %>');
+  <% end %>
+<% else %>
+  $('div#edit-question-form-container #validation-errors').html('<%= j render "validation_errors" %>');
+<% end %>
