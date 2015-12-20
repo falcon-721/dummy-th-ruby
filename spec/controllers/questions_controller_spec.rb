@@ -1,8 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  render_views
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
+
+  describe "GET #show" do
+    specify do
+      get :show, id: question
+      expect(response).to be_success
+    end
+  end
 
   describe "POST #create" do
     before { sign_in(user) }

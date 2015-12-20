@@ -79,14 +79,13 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'with answers list' do
-        let!(:answer_1) { create(:answer, question: question, best: true) }
+        let!(:answer_1) { create(:answer, question: question) }
         let!(:answer_2) { create(:answer, question: question) }
 
         it 'change best attr for answer_1', :aggregate_failures do
-          post :best, id: answer_2, question_id: question, format: :js
-          answer_1.reload
-          expect(answer_1.best).to_not be true
-          expect(answer_2.reload.best).to be true
+          post :best, id: answer_1, question_id: question, format: :js
+          expect(answer_1.reload.best).to be true
+          expect(question.answers.first).to eq answer_1
         end
       end
     end

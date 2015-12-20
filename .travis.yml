@@ -26,7 +26,7 @@ before_script:
   - 'bundle exec rackup -s puma -E production private_pub.ru &'
   - sleep 3
 
-script: 
+script:
   - bundle exec rspec --tag ~visual
 
 gemfile:

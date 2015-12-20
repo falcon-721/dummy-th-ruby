@@ -45,7 +45,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
-  gem 'faker'
   gem 'timecop'
   gem 'factory_girl_rails'
   gem 'better_errors'

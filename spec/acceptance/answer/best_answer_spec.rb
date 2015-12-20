@@ -23,23 +23,27 @@ feature 'Choose best answer', %q{
       end
     end
 
-    scenario 'choose best answer', js: true do
-      find(:link, "best-answer-link-#{answers.last.id}").click
-
-      within("##{dom_id answers.first}") do
-        expect(page).to_not have_selector('p#best-answer')
-      end
-
-      within("##{dom_id answers.last}") do
-        expect(page).to have_selector('p#best-answer')
-      end
-    end
-
     scenario 'choose 2 times', js: true do
       all('a.best-answer-link')[0].click
       all('a.best-answer-link')[1].click
       within('.answers') do
         expect(page).to have_selector('p#best-answer', count: 1)
+      end
+    end
+  end
+
+  context "best answer is first" do
+    given!(:answer) { create(:answer, question: question) }
+    given!(:best_answer) { create(:answer, question: question, best: true) }
+
+    specify do
+      visit question_path(question)
+      within(".answer:first-child") do
+        expect(page).to have_selector('p#best-answer')
+      end
+
+      within(".answer:last-child") do
+        expect(page).not_to have_selector('p#best-answer')
       end
     end
   end

@@ -12,9 +12,9 @@ RSpec.describe Comment, type: :model do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
 
-    it "notifies author about comment" do
+    it "notifies commentable author after create" do
       expect { create(:comment, commentable: question) }
-        .to change { mailbox_for(user.email).size }.by(1)
+        .to change { mailbox_for(user.email).size }
     end
   end
 end

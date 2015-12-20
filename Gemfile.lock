@@ -110,8 +110,6 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faker (1.6.1)
-      i18n (~> 0.5)
     faye (1.1.2)
       cookiejar (>= 0.3.0)
       em-http-request (>= 0.3.0)
@@ -376,7 +374,6 @@ DEPENDENCIES
   devise
   email_spec
   factory_girl_rails
-  faker
   fuubar
   gon
   guard-bundler
