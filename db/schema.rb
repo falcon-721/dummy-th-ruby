@@ -71,15 +71,15 @@ ActiveRecord::Schema.define(version: 20151125071459) do
 
   create_table "votes", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "value",         default: 0, null: false
-    t.integer  "voteable_id"
-    t.string   "voteable_type"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "value",        default: 0, null: false
+    t.integer  "votable_id"
+    t.string   "votable_type"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
-  add_index "votes", ["voteable_id", "voteable_type"], name: "index_votes_on_voteable_id_and_voteable_type", using: :btree
+  add_index "votes", ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type", using: :btree
 
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"

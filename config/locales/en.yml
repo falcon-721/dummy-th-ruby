@@ -20,4 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  questions:
+    create:
+      message: "Your question has been successfully created"
+    destroy:
+      message: "Your question has been successfully removed"
+    update:
+      message: "Your question has been successfully updated"

@@ -1,27 +1,28 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  concern :voteable do
+  concern :votable do
     member do
-      post 'vote_plus'
-      post 'vote_minus'
-      post 're_vote'
+      post :vote_up
+      post :vote_down
+      post :cancel_vote
     end
   end
 
-  concern :commentable do
-    resources :comments, only: [:create]
-  end
-
   resources :questions,
-            concerns: [:voteable, :commentable] do
+            except: [:edit, :new],
+            concerns: [:votable] do
     resources :answers,
-              concerns: [:voteable, :commentable],
+              concerns: [:votable],
               except: [:index, :edit, :new] do
       member do
         post :best
       end
+
+      resources :comments, only: [:create], defaults: { context: 'answer' }
     end
+
+    resources :comments, only: [:create], defaults: { context: 'question' }
   end
 
   root 'questions#index'

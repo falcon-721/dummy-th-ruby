@@ -1,49 +1,30 @@
 class QuestionsController < ApplicationController
   include Voted
 
-  before_action :authenticate_user!, only: [:new, :create, :destroy, :update]
-  before_action :load_question, only: [:show, :destroy, :update]
+  skip_before_action :authenticate_user!, only: [:index, :show]
+
+  before_action :set_question, only: [:show, :destroy, :update]
+
+  after_action :publish_question, only: [:create]
 
   def index
-    @questions = Question.all
-  end
-
-  def show
-    @answer = @question.answers.build
-    gon.current_user_id = current_user.id if current_user
-  end
-
-  def new
-    @question = Question.new
+    @questions = policy_scope(Question)
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      flash[:notice] = 'Your question successfully created.'
-      PrivatePub.publish_to(
-        "/questions",
-        question: render_to_string(partial: 'question', locals: { question: @question })
-      )
-      redirect_to question_path @question
-    else
-      render :new
-    end
+    authorize Question
+    @question = current_user.questions.create(question_params)
+    render_json @question
   end
 
   def destroy
-    if @question.user_id == current_user.id
-      flash[:notice] = 'Your question deleted.'
-      @question.destroy
-    else
-      flash[:alert] = 'You can not delete this question.'
-    end
-    redirect_to questions_path
+    @question.destroy
+    render_json_message
   end
 
   def update
     @question.update(question_params)
+    render_json @question
   end
 
   private
@@ -52,7 +33,17 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body)
   end
 
-  def load_question
+  def set_question
     @question = Question.find(params[:id])
+    authorize @question
+  end
+
+  def publish_question
+    return if @question.errors.any?
+    PrivatePub.publish_to(
+      "/questions",
+      type: 'question',
+      question: @question.serialized
+    )
   end
 end

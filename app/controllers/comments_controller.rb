@@ -1,9 +1,12 @@
 class CommentsController < ApplicationController
   include Contexted
+
   before_action :set_context, only: [:create]
+
   after_action :publish_comment, only: [:create]
 
   def create
+    authorize Comment
     @comment = @context.comments.create(
       comment_params.merge(user: current_user)
     )
@@ -22,7 +25,7 @@ class CommentsController < ApplicationController
       @context.private_pub_channel,
       type: 'comment',
       kind: 'create',
-      comment: CommentSerializer.new(@comment)
+      comment: @comment.serialized
     )
   end
 end

@@ -1,6 +1,15 @@
-= form_for @question, remote: remote do |f|
-  p= f.label :title
-  p= f.text_field :title
-  p= f.label :body
-  p= f.text_area :body
-  p= f.submit submit_text
+#question_form style="display: none;"
+  = form_for @question || :question, remote: true do |f|
+    .row
+      .input-field.col.s12
+        =f.text_field :title
+        =f.label :title
+    .row
+      .input-field.col.s12
+        =f.label :body
+        =f.text_area :body, class: 'materialize-textarea'
+    .row
+      .col
+        =f.submit "Save", class: 'waves-effect waves-light btn'
+      .col
+        .btn.cancel-btn.grey.waves-effect.waves-light.lighten-4.black-text Cancel

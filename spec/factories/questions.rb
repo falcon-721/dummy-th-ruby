@@ -5,7 +5,7 @@ FactoryGirl.define do
 
   factory :question do
     title
-    body "MyText"
+    body { Faker::Lorem.sentence }
     user
   end
 

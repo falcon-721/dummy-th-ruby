@@ -1,17 +1,10 @@
-div.question
+.question
   = render 'question_block'
 
--if @question.answers.any?
-  .answers data={question_id: @question.id}
-    .answers-list
-      = render 'answers'
+.answers.collection
+  = render 'answers'
 
-    - if user_signed_in?
-      div#new-answer-form
-        h3 New answer
-        = form_for [@question, @answer], remote: true do |f|
-          p= f.label :body, 'Answer body'
-          p= f.text_area :body
-          p= f.submit 'Create Answer'
+- if policy(Answer).create?
+  = render 'answers/form'
 
-= subscribe_to "/questions/#{@question.id}/answers"
+= subscribe_to "/questions/#{@question.id}"

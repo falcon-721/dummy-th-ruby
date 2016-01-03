@@ -14,7 +14,7 @@ module Serialized
   end
 
   def render_errors(object)
-    render json: object.errors.full_messages, status: :forbidden
+    render text: object.errors.full_messages.join("<br/>"), status: :forbidden
   end
 
   def render_not_found

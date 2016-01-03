@@ -1,36 +1,15 @@
 $ ->
-  $('.question').on 'click', 'a.edit-question-link', (e) ->
+  questionForm = $("#question_form")
+  addQuestionBtn = $("#add_question_btn")
+
+  addQuestionBtn.on 'click', (e) ->
     e.preventDefault()
-    $(this).hide()
-    $('div#edit-question-form-container').show()
+    questionForm.show()
+    questionForm.find(".cancel-btn").one 'click', ->
+      questionForm.hide()
 
-  $('.answers').on 'click', 'a.edit-answer-link', (e) ->
-    e.preventDefault()
-    answer_id = $(this).data('answer-id')
-    $(this).hide()
-    $('form#edit_answer_' + answer_id).show()
+  questionForm.on 'ajax:success', (e, data, status, xhr) ->
+    App.utils.successMessage(data?.message)
+    window.location.href = "/questions/#{data.question.id}"
 
-
-  $('.question').on 'ajax:success', '.vote-plus, .vote-minus, .re-vote', (e, data, status, xhr) ->
-    response = $.parseJSON(xhr.responseText)
-    $('.question .votes-container').html(response._html)
-
-  $('.answers').on 'ajax:success', '.vote-plus, .vote-minus, .re-vote', (e, data, status, xhr) ->
-    response = $.parseJSON(xhr.responseText)
-    $('#answer_' + response.voted_to_id + ' .votes-container').html(response._html)
-
-  PrivatePub.subscribe '/questions', (data, channel) ->
-    $('.questions-container').append(data['question'])
-
-  questionId = $('.answers').data('question-id')
-
-  PrivatePub.subscribe "/questions/" + questionId + "/answers", (data, channel) ->
-    a = $.parseJSON(data.post)
-    if a.type == 'new_comment'
-      if a.commentable_type == 'Question'
-        $('.question .comments-list').append(a._html)
-      if a.commentable_type == 'Answer'
-        $('#answer_' + a.commentable_id + ' .comments-list').append(a._html)
-
-    if a.type == 'new_answer'
-      $('div.answers div.answers-list').append(a._html)
+  questionForm.on 'ajax:error', App.utils.ajaxErrorHandler

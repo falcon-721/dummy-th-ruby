@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery_ujs
 //= require materialize-sprockets 
 //= require private_pub
 //= require_tree .

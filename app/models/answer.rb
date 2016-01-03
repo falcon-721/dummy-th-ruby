@@ -1,5 +1,5 @@
-class Answer < ActiveRecord::Base
-  include Voteable
+class Answer < ApplicationRecord
+  include Votable
   include Commentable
 
   belongs_to :question
@@ -12,7 +12,6 @@ class Answer < ActiveRecord::Base
   def make_best
     ActiveRecord::Base.transaction do
       question.answers.update_all(best: false)
-      # self.best = true
       update!(best: true)
     end
   end

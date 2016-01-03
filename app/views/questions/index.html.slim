@@ -1,12 +1,13 @@
 h3 Questions
 - if @questions.any?
   .questions-list.collection
-    - @questions.each do |question|
-      = render partial: 'question', locals: { question: question }
+    = render @questions
 - else
   .row
     .col.s6.offset-s3.center No question found(
 
 = render 'shared/add_question_btn'
+= render 'form'
 
-= subscribe_to '/questions'
+= content_for :scripts
+  = subscribe_to '/questions'

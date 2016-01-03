@@ -1,11 +1,7 @@
 FactoryGirl.define do
-  sequence :body do |n|
-    "Answer #{n}"
-  end
-
   factory :answer do
     question
-    body
+    body { Faker::Lorem.sentence }
     user
   end
 

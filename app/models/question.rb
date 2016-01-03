@@ -1,5 +1,5 @@
-class Question < ActiveRecord::Base
-  include Voteable
+class Question < ApplicationRecord
+  include Votable
   include Commentable
 
   has_many :answers, dependent: :destroy

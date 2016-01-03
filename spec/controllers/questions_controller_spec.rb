@@ -104,7 +104,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'POST #vote_plus' do
+  describe 'POST #vote_up' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:another_question) { create(:question) }
@@ -113,34 +113,34 @@ RSpec.describe QuestionsController, type: :controller do
     context 'not qusetion autor can vote for Question' do
       it 'change Votes count' do
         expect {
-          post :vote_plus, id: another_question
+          post :vote_up, id: another_question
         }.to change(another_question.votes, :count).by(1)
       end
 
       it 'have votes sum' do
-        post :vote_plus, id: another_question
+        post :vote_up, id: another_question
         expect(another_question.votes_sum).to eq 1
       end
 
       context 'double vote' do
-        before { post :vote_plus, id: another_question }
+        before { post :vote_up, id: another_question }
         it 'not change Votes count' do
           expect {
-            post :vote_plus, id: another_question
+            post :vote_up, id: another_question
           }.to_not change(another_question.votes, :count)
         end
       end
 
       context 're-vote' do
-        let!(:vote) { create(:vote_for_question, user: user, voteable: another_question, value: -1) }
+        let!(:vote) { create(:vote, user: user, votable: another_question, value: -1) }
         it 'not change Votes count' do
           expect {
-            post :vote_plus, id: another_question
+            post :vote_up, id: another_question
           }.to_not change(another_question.votes, :count)
         end
 
         it 'change vote.value' do
-          post :vote_plus, id: another_question
+          post :vote_up, id: another_question
           vote.reload
           expect(vote.value).to eq 1
         end
@@ -150,18 +150,18 @@ RSpec.describe QuestionsController, type: :controller do
     context 'question author can not vote for Question' do
       it 'not change Votes count' do
         expect {
-          post :vote_plus, id: question
+          post :vote_up, id: question
         }.to_not change(Vote, :count)
       end
 
       it 'have votes sum' do
-        post :vote_plus, id: question
+        post :vote_up, id: question
         expect(another_question.votes_sum).to eq 0
       end
     end
   end
 
-  describe 'POST #vote_minus' do
+  describe 'POST #vote_down' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:another_question) { create(:question) }
@@ -170,34 +170,34 @@ RSpec.describe QuestionsController, type: :controller do
     context 'not question autor can vote for Question' do
       it 'change Votes count' do
         expect {
-          post :vote_minus, id: another_question
+          post :vote_down, id: another_question
         }.to change(another_question.votes, :count).by(1)
       end
 
       it 'have votes sum' do
-        post :vote_minus, id: another_question
+        post :vote_down, id: another_question
         expect(another_question.votes_sum).to eq -1
       end
 
       context 'double vote' do
-        before { post :vote_minus, id: another_question }
+        before { post :vote_down, id: another_question }
         it 'not change Votes count' do
           expect {
-            post :vote_minus, id: another_question
+            post :vote_down, id: another_question
           }.to_not change(another_question.votes, :count)
         end
       end
 
       context 're-vote' do
-        let!(:vote) { create(:vote_for_question, user: user, voteable: another_question, value: 1) }
+        let!(:vote) { create(:vote, user: user, votable: another_question, value: 1) }
         it 'not change Votes count' do
           expect {
-            post :vote_minus, id: another_question
+            post :vote_down, id: another_question
           }.to_not change(another_question.votes, :count)
         end
 
         it 'change vote.value' do
-          post :vote_minus, id: another_question
+          post :vote_down, id: another_question
           vote.reload
           expect(vote.value).to eq -1
         end
@@ -207,30 +207,28 @@ RSpec.describe QuestionsController, type: :controller do
     context 'question author can not vote for Question' do
       it 'not change Votes count' do
         expect {
-          post :vote_minus, id: question
+          post :vote_down, id: question
         }.to_not change(Vote, :count)
       end
 
       it 'have votes sum' do
-        post :vote_minus, id: question
+        post :vote_down, id: question
         expect(another_question.votes_sum).to eq 0
       end
     end
   end
 
-  describe 'POST #re_vote' do
+  describe 'POST #cancel_vote' do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
-    let!(:vote) { create(:vote, voteable: question, user: user, value: 1) }
+    let!(:vote) { create(:vote, votable: question, user: user, value: 1) }
 
     before { sign_in user }
 
-    context 're-vote' do
-      it 'destroy vote for user' do
-        expect {
-          post :re_vote, id: question
-        }.to change(Vote, :count).by(-1)
-      end
+    it 'destroy vote' do
+      expect {
+        post :cancel_vote, id: question
+      }.to change(Vote, :count).by(-1)
     end
   end
 end

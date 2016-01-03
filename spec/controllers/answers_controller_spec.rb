@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AnswersController, type: :controller do
+describe AnswersController do
   let(:question) { create(:question) }
   let(:user) { create(:user) }
 
@@ -100,7 +100,7 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'POST #vote_plus' do
+  describe 'POST #vote_up' do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question, user: user) }
@@ -110,34 +110,34 @@ RSpec.describe AnswersController, type: :controller do
     context 'not answer autor can vote for Answer' do
       it 'change Votes count' do
         expect {
-          post :vote_plus, question_id: question, id: another_answer
+          post :vote_up, question_id: question, id: another_answer
         }.to change(another_answer.votes, :count).by(1)
       end
 
       it 'have votes sum' do
-        post :vote_plus, question_id: question, id: another_answer
+        post :vote_up, question_id: question, id: another_answer
         expect(another_answer.votes_sum).to eq 1
       end
 
       context 'double vote' do
-        before { post :vote_plus, question_id: question, id: another_answer }
+        before { post :vote_up, question_id: question, id: another_answer }
         it 'not change Votes count' do
           expect {
-            post :vote_plus, question_id: question, id: another_answer
+            post :vote_up, question_id: question, id: another_answer
           }.to_not change(another_answer.votes, :count)
         end
       end
 
       context 're-vote' do
-        let!(:vote) { create(:vote_for_answer, user: user, voteable: another_answer, value: -1) }
+        let!(:vote) { create(:vote, user: user, votable: another_answer, value: -1) }
         it 'not change Votes count' do
           expect {
-            post :vote_plus, question_id: question, id: another_answer
+            post :vote_up, question_id: question, id: another_answer
           }.to_not change(another_answer.votes, :count)
         end
 
         it 'change vote.value' do
-          post :vote_plus, question_id: question, id: another_answer
+          post :vote_up, question_id: question, id: another_answer
           vote.reload
           expect(vote.value).to eq 1
         end
@@ -147,18 +147,18 @@ RSpec.describe AnswersController, type: :controller do
     context 'answer author can not vote for Answer' do
       it 'not change Votes count' do
         expect {
-          post :vote_plus, question_id: question, id: answer
+          post :vote_up, question_id: question, id: answer
         }.to_not change(Vote, :count)
       end
 
       it 'have votes sum' do
-        post :vote_plus, question_id: question, id: answer
+        post :vote_up, question_id: question, id: answer
         expect(another_answer.votes_sum).to eq 0
       end
     end
   end
 
-  describe 'POST #vote_minus' do
+  describe 'POST #vote_down' do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question, user: user) }
@@ -168,26 +168,26 @@ RSpec.describe AnswersController, type: :controller do
     context 'not answer autor can vote for Answer' do
       it 'change Votes count' do
         expect {
-          post :vote_minus, question_id: question, id: another_answer
+          post :vote_down, question_id: question, id: another_answer
         }.to change(another_answer.votes, :count).by(1)
       end
 
       it 'have votes sum' do
-        post :vote_minus, question_id: question, id: another_answer
+        post :vote_down, question_id: question, id: another_answer
         expect(another_answer.votes_sum).to eq(-1)
       end
 
       context 'double vote' do
-        before { post :vote_minus, question_id: question, id: another_answer }
+        before { post :vote_down, question_id: question, id: another_answer }
         it 'not change Votes count' do
           expect {
-            post :vote_minus, question_id: question, id: another_answer
+            post :vote_down, question_id: question, id: another_answer
           }.to_not change(another_answer.votes, :count)
         end
       end
 
-      it 'responds with JSON object' do
-        post :vote_minus, question_id: question, id: another_answer
+      xit 'responds with JSON object' do
+        post :vote_down, question_id: question, id: another_answer
         expect(response.body).to be_json_eql(another_answer.id).at_path('voted_to_id')
       end
     end
@@ -195,31 +195,29 @@ RSpec.describe AnswersController, type: :controller do
     context 'question author can not vote for Answer' do
       it 'not change Votes count' do
         expect {
-          post :vote_minus, question_id: question, id: answer
+          post :vote_down, question_id: question, id: answer
         }.to_not change(Vote, :count)
       end
 
       it 'have votes sum' do
-        post :vote_minus, question_id: question, id: answer
+        post :vote_down, question_id: question, id: answer
         expect(another_answer.votes_sum).to eq 0
       end
     end
   end
 
-  describe 'POST #re_vote' do
+  describe 'POST #cancel_vote' do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question) }
-    let!(:vote) { create(:vote, user: user, voteable: answer, value: 1) }
+    let!(:vote) { create(:vote, user: user, votable: answer, value: 1) }
 
     before { sign_in user }
 
-    context 're-vote' do
-      it 'destroy vote to user' do
-        expect {
-          post :re_vote, question_id: question, id: answer
-        }.to change(Vote, :count).by(-1)
-      end
+    it 'destroy vote' do
+      expect {
+        post :cancel_vote, question_id: question, id: answer
+      }.to change(Vote, :count).by(-1)
     end
   end
 end
