@@ -1,6 +1,0 @@
-p Attachments
-ul
-  - files.each do |a|
-    - unless a.new_record?
-      li
-        = link_to a.file.identifier, a.file.url

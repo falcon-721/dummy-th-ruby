@@ -1,9 +1,5 @@
 <% if @answer.valid? %>
-  <% if remotipart_submitted? %>
-    $('div.answers div.answers-list').append('<%= j "#{render partial: @answer, locals: { answer: @answer }}" %>');
-  <% else %>
-    $('div.answers div.answers-list').append('<%= j render partial: @answer, locals: { answer: @answer } %>');
-  <% end %>
+  $('div.answers div.answers-list').append('<%= j render partial: @answer, locals: { answer: @answer } %>');
   $('form#new_answer p textarea').val('');
   $('form#new_answer div input[type="file"]').val('');
 <% else %>

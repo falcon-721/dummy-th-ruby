@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  include VoteableController
+  include Voted
 
   before_action :authenticate_user!, only: [:new, :create, :destroy, :update]
   before_action :load_question, only: [:show, :destroy, :update]
@@ -10,9 +10,6 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
-    @answer.attachments.build
-    @question.attachments.build
-
     gon.current_user_id = current_user.id if current_user
   end
 
@@ -53,7 +50,7 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
+    params.require(:question).permit(:title, :body)
   end
 
   def load_question

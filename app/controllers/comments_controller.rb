@@ -1,27 +1,13 @@
 class CommentsController < ApplicationController
-  before_action :authenticate_user!, only: [:create]
-  before_action :load_commentable, only: [:create]
-
-  def show
-    @comment = Comment.find(params[:id])
-    render partial: 'comment', locals: { comment: @comment }, layout: false
-  end
+  include Contexted
+  before_action :set_context, only: [:create]
+  after_action :publish_comment, only: [:create]
 
   def create
-    @comment = @commentable.comments.build(comment_params)
-    @comment.user_id = current_user.id
-    if @comment.save
-      PrivatePub.publish_to(
-        publish_channel(@commentable),
-        post: (
-          @comment.attributes.merge(
-            type: 'new_comment',
-            commentable_type: @commentable.class.name,
-            commentable_id: @commentable.id,
-            _html: render_to_string(partial: 'comment', locals: { comment: @comment })
-          )).to_json)
-      render nothing: true
-    end
+    @comment = @context.comments.create(
+      comment_params.merge(user: current_user)
+    )
+    render_json @comment
   end
 
   private
@@ -30,31 +16,13 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:body)
   end
 
-  def commentable_class
-    params[:comment][:commentable].classify.constantize
-  end
-
-  def commentable_id
-    case params[:comment][:commentable]
-    when 'Question'
-      params[:question_id]
-
-    when 'Answer'
-      params[:answer_id]
-    end
-  end
-
-  def publish_channel(commentable)
-    case commentable
-    when Question
-      "/questions/#{commentable.id}/answers"
-
-    when Answer
-      "/questions/#{commentable.question.id}/answers"
-    end
-  end
-
-  def load_commentable
-    @commentable = commentable_class.find(commentable_id)
+  def publish_comment
+    return if @comment.errors.any?
+    PrivatePub.publish_to(
+      @context.private_pub_channel,
+      type: 'comment',
+      kind: 'create',
+      comment: CommentSerializer.new(@comment)
+    )
   end
 end

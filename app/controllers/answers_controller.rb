@@ -1,47 +1,38 @@
 class AnswersController < ApplicationController
-  include VoteableController
+  include Voted
 
-  before_action :authenticate_user!, only: [:create, :destroy]
-  before_action :set_question, only: [:create, :show]
-  before_action :set_answer, only: [:destroy, :update, :best, :show]
+  before_action :set_question, only: [:create]
+  before_action :set_answer, only: [:destroy, :update, :best]
 
-  def show
-    render partial: @answer, locals: { answer: @answer }
-  end
+  after_action :publish_answer, only: [:create]
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
-    if @answer.save
-      PrivatePub.publish_to(
-        "/questions/#{@question.id}/answers",
-        post:
-          { type: 'new_answer',
-            _html: render_to_string(partial: 'answer', locals: { answer: @answer }) }.to_json
-      )
-      render nothing: true
-    end
+    authorize Answer
+    @answer = @question.answers.create(
+      answer_params.merge(user: current_user)
+    )
+    render_json @answer
   end
 
   def destroy
-    @answer.destroy if @answer.user_id == current_user.id
+    @answer.destroy
+    render_json_message
   end
 
   def update
-    @question = @answer.question
     @answer.update(answer_params)
+    render_json @answer
   end
 
   def best
-    @question = @answer.question
-    # @answer.best = true
-    @answer.make_best if @question.user_id == current_user.id
+    @answer.make_best
+    render_json @answer
   end
 
   private
 
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
+    params.require(:answer).permit(:body)
   end
 
   def set_question
@@ -50,5 +41,15 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+    authorize @answer
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    PrivatePub.publish_to(
+      "/questions/#{@question.id}",
+      type: 'answer',
+      answer: AnswerSerializer.new(@answer).as_json
+    )
   end
 end

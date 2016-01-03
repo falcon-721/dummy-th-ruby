@@ -1,13 +1,7 @@
 <% if @answer.valid? %>
-  <% if remotipart_submitted? %>
-    $("div#<%= dom_id @answer %>").html(
-      '<%= j "#{render partial: @answer, locals: { answer: @answer }}" %>'
-      );
-  <% else %>
-    $("div#<%= dom_id @answer %>").html(
-      '<%= j render partial: @answer, locals: { answer: @answer } %>'
-    );
-  <% end %>
+  $("div#<%= dom_id @answer %>").html(
+    '<%= j render partial: @answer, locals: { answer: @answer } %>'
+  );
 <% else %>
   $('<%= j render 'answers/validation_errors' %>').insertBefore($('.edit-answer-form form'));
 <% end %>

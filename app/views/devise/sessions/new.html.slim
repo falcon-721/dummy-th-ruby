@@ -1,0 +1,20 @@
+h2 Log in
+
+= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+  .row
+    .col.input-field.s12
+      = f.email_field :email, autofocus: true, class: 'validate'
+      = f.label :email
+  .row
+    .col.input-field.s12
+      = f.password_field :password, autocomplete: "off"
+      = f.label :password
+  p
+    = f.check_box :remember_me
+    = f.label :remember_me
+
+  .row
+    .col.s12
+      = f.submit "Log in", class: 'waves-effect waves-light btn'
+
+= render "devise/shared/links"

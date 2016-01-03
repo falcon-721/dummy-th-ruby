@@ -11,9 +11,6 @@
 // about supported directives.
 //
 //= require jquery
-//= require bootstrap-sprockets
-//= require jquery_ujs
-//= require jquery.remotipart
+//= require materialize-sprockets 
 //= require private_pub
-//= require cocoon
 //= require_tree .

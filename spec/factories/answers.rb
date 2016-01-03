@@ -14,11 +14,4 @@ FactoryGirl.define do
     body nil
     user
   end
-
-  factory :answer_with_files, class: 'Answer' do
-    body
-    after(:create) do |answer|
-      answer.attachments.create(attributes_for(:attachment))
-    end
-  end
 end

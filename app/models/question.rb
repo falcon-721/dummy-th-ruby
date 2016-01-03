@@ -1,5 +1,4 @@
 class Question < ActiveRecord::Base
-  include Attachable
   include Voteable
   include Commentable
 

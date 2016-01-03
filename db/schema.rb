@@ -22,21 +22,11 @@ ActiveRecord::Schema.define(version: 20151125071459) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "user_id"
-    t.boolean  "best",        default: false
+    t.boolean  "best",        default: false, null: false
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
   add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
-
-  create_table "attachments", force: :cascade do |t|
-    t.string   "file"
-    t.integer  "attachable_id"
-    t.string   "attachable_type"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
-  add_index "attachments", ["attachable_id", "attachable_type"], name: "index_attachments_on_attachable_id_and_attachable_type", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.text     "body"
@@ -61,6 +51,7 @@ ActiveRecord::Schema.define(version: 20151125071459) do
   add_index "questions", ["user_id"], name: "index_questions_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
+    t.string   "name"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "email",                  default: "", null: false
@@ -80,7 +71,7 @@ ActiveRecord::Schema.define(version: 20151125071459) do
 
   create_table "votes", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "value",         default: 0
+    t.integer  "value",         default: 0, null: false
     t.integer  "voteable_id"
     t.string   "voteable_type"
     t.datetime "created_at",                null: false

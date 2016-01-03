@@ -1,11 +1,8 @@
-.answer id="#{dom_id answer}"
-  p.answer-body= answer.body
-
-  - if answer.attachments.any?
-    = render 'shared/attached_files', files: answer.attachments
+.answer id=dom_id(answer)
+  p.answer-body =answer.body
 
   .votes-container
-    = render partial: 'shared/votes', locals: { voted_to: answer }
+    = render partial: 'shared/votes', locals: { votable: answer }
 
   - if answer.best?
     p#best-answer Best answer
@@ -16,10 +13,6 @@
       = form_for [@question, answer], remote: true do |f|
         p= f.label :body, 'Answer'
         p= f.text_area :body
-        p= f.fields_for :attachments do |a|
-          = render 'shared/attachment_fields', f: a
-        .links
-          = link_to_add_association 'add file', f, :attachments, partial: 'shared/attachment_fields'
         p= f.submit 'Save'
 
     p= link_to 'Delete answer', [@question, answer], remote: true, method: :delete

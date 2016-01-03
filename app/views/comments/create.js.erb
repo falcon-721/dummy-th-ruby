@@ -1,6 +1,5 @@
 <% if @comment.valid? %>
   <% if @commentable.is_a? Question %>
-    debugger;
     $('.question .comments-list').append(
       '<%= j render partial: @comment, locals: { comment: @comment} %>'
     );

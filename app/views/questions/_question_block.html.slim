@@ -1,12 +1,9 @@
 .question-header
-  h3= @question.title
+  h3 =@question.title
 
-p= @question.body
-- if @question.attachments.any?
-  = render 'shared/attached_files', files: @question.attachments
-
+p =@question.body
 .votes-container
-  = render partial: 'shared/votes', locals: { voted_to: @question }
+  = render partial: 'shared/votes', locals: { votable: @question }
 
 - if current_user && current_user.id == @question.user_id
   .question-controls

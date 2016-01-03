@@ -1,29 +1,29 @@
 .votes.clearfix
   h5 Votes
   p.votes-sum
-    = voted_to.votes_sum
+    = votable.votes_sum
 
   div.votes-links
     - if current_user
-      - if voted_to.user_is_voted?(current_user)
+      - if votable.user_is_voted?(current_user)
         p
-          - if voted_to.kind_of? Question
-            =  link_to 'Re-vote?', re_vote_question_path(voted_to), remote: true, method: :post, class: 're-vote'
+          - if votable.kind_of? Question
+            =  link_to 'Re-vote?', re_vote_question_path(votable), remote: true, method: :post, class: 're-vote'
 
-          - if voted_to.kind_of? Answer
-            =  link_to 'Re-vote?', re_vote_question_answer_path(voted_to.question, voted_to), remote: true, method: :post, class: 're-vote'
+          - if votable.kind_of? Answer
+            =  link_to 'Re-vote?', re_vote_question_answer_path(votable.question, votable), remote: true, method: :post, class: 're-vote'
 
       - else
-        - if current_user.id != voted_to.user_id
+        - if current_user.id != votable.user_id
           p
-            - if voted_to.kind_of? Question
-              = link_to '+', vote_plus_question_path(voted_to), remote: true, method: :post, class: 'vote-plus'
-            - if voted_to.kind_of? Answer
-              = link_to('+', vote_plus_question_answer_path(voted_to.question, voted_to),
+            - if votable.kind_of? Question
+              = link_to '+', vote_plus_question_path(votable), remote: true, method: :post, class: 'vote-plus'
+            - if votable.kind_of? Answer
+              = link_to('+', vote_plus_question_answer_path(votable.question, votable),
                         remote: true, method: :post, class: 'vote-plus')
           p
-            - if voted_to.kind_of? Question
-              = link_to '-', vote_minus_question_path(voted_to), remote: true, method: :post, class: 'vote-minus'
-            - if voted_to.kind_of? Answer
-              = link_to('-', vote_minus_question_answer_path(voted_to.question, voted_to),
+            - if votable.kind_of? Question
+              = link_to '-', vote_minus_question_path(votable), remote: true, method: :post, class: 'vote-minus'
+            - if votable.kind_of? Answer
+              = link_to('-', vote_minus_question_answer_path(votable.question, votable),
                         remote: true, method: :post, class: 'vote-minus')

@@ -1,5 +1,2 @@
-$('p#best-answer').each(function(){
-  $(this).remove();
-});
-
+$('p#best-answer').remove();
 $('div#<%= dom_id @answer %> p.answer-body').after('<p id="best-answer">Best answer</p>');
