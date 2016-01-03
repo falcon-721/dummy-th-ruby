@@ -1,11 +1,12 @@
-p= link_to 'Ask question', new_question_path
-
-h3 Questions list
+h3 Questions
 - if @questions.any?
-  .questions-container
+  .questions-list.collection
     - @questions.each do |question|
       = render partial: 'question', locals: { question: question }
 - else
-  div Questions is empty
+  .row
+    .col.s6.offset-s3.center No question found(
+
+= render 'shared/add_question_btn'
 
 = subscribe_to '/questions'
