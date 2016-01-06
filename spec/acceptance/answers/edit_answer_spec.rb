@@ -1,4 +1,4 @@
-require_relative '../acceptance_helper'
+require 'acceptance_helper'
 
 feature 'Edit Answer for Question', %q{
   In order to Edit answer for Question

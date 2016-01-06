@@ -4,7 +4,6 @@ html
     title TH Demo
     = Gon::Base.render_data
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = stylesheet_link_tag 'https://fonts.googleapis.com/icon?family=Material+Icons'
     = csrf_meta_tags
   body
     .navbar-fixed
@@ -20,9 +19,10 @@ html
                 = link_to 'Sign in', new_user_session_path
               li
                 = link_to 'Sign up', new_user_registration_path
-    .container
+    .container.main
       = yield
 
     .footer
       = javascript_include_tag 'application'
       = yield :scripts
+      = render_flash

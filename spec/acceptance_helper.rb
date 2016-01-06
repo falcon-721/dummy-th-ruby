@@ -22,8 +22,8 @@ RSpec.configure do |config|
 
   Capybara.javascript_driver = :poltergeist
 
-  RSpec::PageRegression.configure do |config|
-    config.threshold = 0.01
+  RSpec::PageRegression.configure do |c|
+    c.threshold = 0.01
   end
 
   config.use_transactional_fixtures = false
@@ -38,7 +38,7 @@ RSpec.configure do |config|
 
   config.after(:each) { Timecop.return }
 
-  config.after(:each) do
+  config.append_after(:each) do
     Capybara.reset_sessions!
     DatabaseCleaner.clean
   end

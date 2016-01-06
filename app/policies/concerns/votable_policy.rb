@@ -6,10 +6,8 @@ module VotablePolicy
   end
 
   def cancel_vote?
-    user? && target.votes.where(user_id: user.id).exists?
+    user?
   end
-
-  protected
 
   def vote?
     user? && !author?

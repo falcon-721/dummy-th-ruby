@@ -1,20 +1,16 @@
-.question-header
-  h3 =@question.title
-
-p =@question.body
-.votes-container
-  = render partial: 'shared/votes', locals: { votable: @question }
-
-- if current_user && current_user.id == @question.user_id
+.question-info
+  .section
+    h5.question-title =@question.title
+    p =@question.body 
+    = render 'shared/votes', votable: @question
   .question-controls
-    ul.clear
-      li
-        = link_to 'Edit', '', class: 'edit-question-link'
-      li
-        = link_to 'Delete question', @question, method: :delete
+    .row
+      - if policy(@question).update?
+        .col
+          = link_to 'Edit', '', class: 'edit-question-link', id: "add_question_btn"
+      - if policy(@question).destroy?
+        .col
+          = link_to 'Delete', @question, method: :delete
 
-  div#edit-question-form-container
-    div#validation-errors
-    = render partial: 'form', locals: { submit_text: 'Save', remote: true }
-
-= render 'comments/list', commentable: @question, comment: @question.comments.build
+  = render 'form'
+  / = render 'comments/list', commentable: @question, comment: @question.comments.build

@@ -1,4 +1,4 @@
-require_relative '../acceptance_helper'
+require 'acceptance_helper'
 
 feature 'Vote for the answer', %q{
   In order to vote the answer

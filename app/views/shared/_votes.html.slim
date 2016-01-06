@@ -1,29 +1,15 @@
-.votes.clearfix
-  h5 Votes
-  p.votes-sum
-    = votable.votes_sum
-
-  div.votes-links
-    - if current_user
-      - if votable.user_is_voted?(current_user)
-        p
-          - if votable.kind_of? Question
-            =  link_to 'Re-vote?', re_vote_question_path(votable), remote: true, method: :post, class: 're-vote'
-
-          - if votable.kind_of? Answer
-            =  link_to 'Re-vote?', re_vote_question_answer_path(votable.question, votable), remote: true, method: :post, class: 're-vote'
-
-      - else
-        - if current_user.id != votable.user_id
-          p
-            - if votable.kind_of? Question
-              = link_to '+', vote_plus_question_path(votable), remote: true, method: :post, class: 'vote-plus'
-            - if votable.kind_of? Answer
-              = link_to('+', vote_plus_question_answer_path(votable.question, votable),
-                        remote: true, method: :post, class: 'vote-plus')
-          p
-            - if votable.kind_of? Question
-              = link_to '-', vote_minus_question_path(votable), remote: true, method: :post, class: 'vote-minus'
-            - if votable.kind_of? Answer
-              = link_to('-', vote_minus_question_answer_path(votable.question, votable),
-                        remote: true, method: :post, class: 'vote-minus')
+.votes.row class="#{ 'has-vote' if votable.voted_by?(current_user) }"
+  .col.chip.votes-sum =votable.votes_sum
+  - if policy(votable).vote?
+    .col.vote-up-chip
+      = link_to polymorphic_path(votable, action: :vote_up), remote: true, method: :post, class: 'vote-link chip' do
+        | Like
+        i.material-icons.green-text.no-events thumb_up
+    .col.vote-down-chip
+      = link_to polymorphic_path(votable, action: :vote_down), remote: true, method: :post, class: 'vote-link chip' do
+        | Dislike
+        i.material-icons.red-text.no-events thumb_down
+    .col.vote-cancel-chip
+      = link_to polymorphic_path(votable, action: :cancel_vote), remote: true, method: :post, class: 'vote-link chip' do
+        | Cancel
+        i.material-icons.no-events close

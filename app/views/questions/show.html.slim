@@ -1,10 +1,10 @@
-.question
-  = render 'question_block'
+= render 'question_block'
 
-.answers.collection
-  = render 'answers'
+= render 'answers'
 
 - if policy(Answer).create?
-  = render 'answers/form'
+  = render 'shared/add_btn', id: "add_answer_btn"
+  = render 'answers/form', id: 'new_answer_form', answer: @question.answers.new
 
-= subscribe_to "/questions/#{@question.id}"
+= content_for :scripts
+  = subscribe_to "/questions/#{@question.id}"

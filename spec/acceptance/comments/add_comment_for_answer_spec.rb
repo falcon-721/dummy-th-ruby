@@ -1,4 +1,4 @@
-require_relative '../acceptance_helper'
+require 'acceptance_helper'
 
 feature 'Create Comment for Answer', %q{
   In order to create comment for A

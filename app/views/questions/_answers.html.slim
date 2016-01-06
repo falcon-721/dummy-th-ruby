@@ -1,6 +1,4 @@
-h2 Answers
-
-.answers2
-  - @question.answers.each do |answer|
-    - if answer.id
-      = render partial: answer, locals: { answer: answer }
+.answers-content
+  .answers.collection
+    - @question.answers.each do |answer|
+      = render answer

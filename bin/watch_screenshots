@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'listen'
+require 'logger'
+require 'fileutils'
+
+logger = Logger.new(STDOUT)
+path = "tmp/capybara_output"
+
+FileUtils.mkdir_p(path)
+
+listener = Listen.to("tmp/capybara_output") do |modified, added, _removed|
+  files_to_run = modified | added
+  files_to_run.each do |p|
+    logger.info "Open #{p}"
+    `subl #{p}`
+  end
+end
+
+listener.start
+
+logger.info "Start watching capybara screenshots at #{path}"
+
+Signal.trap("INT") { exit }
+
+sleep

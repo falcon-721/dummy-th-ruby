@@ -1,11 +1,6 @@
-require_relative '../acceptance_helper'
+require 'acceptance_helper'
 
-feature 'User sign up', %q{
-  In order to be able to have full functionality
-  As an User
-  I want to be able to Sign up
-} do
-
+feature 'User sign up', js: true do
   given(:user_params) { attributes_for(:user) }
 
   scenario 'Registration with valid attributes' do
@@ -25,8 +20,7 @@ feature 'User sign up', %q{
     fill_in 'Password confirmation', with: ''
     click_button 'Sign up'
 
-    expect(page).to have_content '2 errors prohibited this user from being saved'
+    expect(page).to have_content 'Email is invalid'
     expect(current_path).to eq user_registration_path
   end
-
 end

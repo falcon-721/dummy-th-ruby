@@ -19,7 +19,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question.destroy
-    render_json_message
+    redirect_to questions_path, notice: t('.message')
   end
 
   def update

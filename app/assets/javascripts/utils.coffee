@@ -19,3 +19,7 @@ window.App.utils =
       message = data.responseText
 
     App.utils.errorMessage message
+
+$ ->
+  App.utils.successMessage(App.flash?.success)
+  App.utils.errorMessage(App.flash?.error)

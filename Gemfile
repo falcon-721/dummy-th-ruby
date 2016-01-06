@@ -10,6 +10,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'slim-rails'
 gem 'jquery-rails'
 gem 'materialize-sass'
+gem 'material_icons'
 
 gem 'pundit'
 gem 'active_model_serializers'
@@ -56,5 +57,6 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-rspec', require: false
   gem 'guard-spring', require: false
+  gem 'guard-shell', require: false
   gem 'terminal-notifier-guard', require: false
 end

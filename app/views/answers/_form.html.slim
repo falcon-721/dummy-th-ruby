@@ -1,10 +1,11 @@
-#new-answer-form
-  h3 New answer
-  = form_for [@question, Answer.new], remote: true do |f|
+.answer-edit-form style="display: none;" id="#{ local_assigns.fetch(:id, nil) }"
+  = form_for shallow_resource(@question, answer), remote: true do |f|
     .row
       .input-field.col.s12
+        =f.label :body
         =f.text_area :body, class: 'materialize-textarea'
-        =f.label :body, 'Answer Body'
     .row
-      .actions.col
-        =f.submit 'Create Answer', class: 'waves-effect waves-light btn'
+      .col
+        =f.submit "Save", class: 'waves-effect waves-light btn'
+      .col
+        .btn.cancel-btn.grey.waves-effect.waves-light.lighten-4.black-text Cancel

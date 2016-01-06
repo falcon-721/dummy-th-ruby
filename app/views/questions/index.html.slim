@@ -4,10 +4,11 @@ h3 Questions
     = render @questions
 - else
   .row
-    .col.s6.offset-s3.center No question found(
+    .col.s6.offset-s3.center No questions found(
 
-= render 'shared/add_question_btn'
-= render 'form'
+- if policy(Question).create?
+  = render 'shared/add_btn', id: "add_question_btn"
+  = render 'form'
 
 = content_for :scripts
   = subscribe_to '/questions'

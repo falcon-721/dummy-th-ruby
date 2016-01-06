@@ -1,11 +1,6 @@
-require_relative '../acceptance_helper'
+require 'acceptance_helper'
 
-feature 'User sign in', %q{
-  In order to be able to ask question
-  As an User
-  I want to be able to sign in
-} do
-
+feature 'User sign in', js: true do
   given(:user) { create(:user) }
 
   scenario 'Registered user try to sing in' do
@@ -25,7 +20,7 @@ feature 'User sign in', %q{
     expect(current_path).to eq new_user_session_path
   end
 
-  scenario 'show login form', :visual, :js do
+  scenario 'show login form', :visual do
     visit new_user_session_path
     expect(page).to match_expectation
   end

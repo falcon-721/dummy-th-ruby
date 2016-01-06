@@ -1,28 +1,25 @@
-.answer id=dom_id(answer)
-  p.answer-body =answer.body
-
-  .votes-container
-    = render partial: 'shared/votes', locals: { votable: answer }
-
+.answer.collection-item.section id=dom_id(answer)
   - if answer.best?
-    p#best-answer Best answer
+    span.badge best
+  p.answer-body =answer.body
+  = render 'shared/votes', votable: answer
 
-  - if current_user && current_user.id == answer.user_id
-    p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-    .edit-answer-form
-      = form_for [@question, answer], remote: true do |f|
-        p= f.label :body, 'Answer'
-        p= f.text_area :body
-        p= f.submit 'Save'
+  .answer-controls
+    .row
+      - if policy(answer).update?
+        .col
+          = link_to 'Edit', '#', class: 'edit-answer-link'
+      - if policy(answer).destroy?
+        .col
+          = link_to 'Delete', answer, method: :delete, remote: true, class: 'delete-answer-link'
+      - if policy(answer).best?
+        .col
+          = link_to 'Best answer', best_answer_path(answer),
+              remote: true,
+              method: :post,
+              class: 'best-answer-link'
+  - if policy(answer).update?
+    = render 'answers/form', id: "answer_form_#{answer.id}", answer: answer
 
-    p= link_to 'Delete answer', [@question, answer], remote: true, method: :delete
 
-  - if current_user && current_user.id == @question.user_id
-    p
-      = link_to 'Best answer', best_question_answer_path(@question, answer),
-                 remote: true,
-                 method: :post,
-                 class: 'best-answer-link',
-                 id: "best-answer-link-#{answer.id}"
-
-  = render partial: 'comments/list', locals: { commentable: answer, comment: answer.comments.build }
+  / = render partial: 'comments/list', locals: { commentable: answer, comment: answer.comments.build }

@@ -147,6 +147,9 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    guard-shell (0.7.1)
+      guard (>= 2.0.0)
+      guard-compat (~> 1.0)
     guard-spring (1.1.1)
       guard (~> 2.0)
       guard-compat (~> 1.1)
@@ -172,6 +175,8 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    material_icons (2.0.0)
+      railties (>= 3.2)
     materialize-sass (0.97.5)
       sass (~> 3.3)
     meta_request (0.3.4)
@@ -370,10 +375,12 @@ DEPENDENCIES
   guard-bundler
   guard-rails
   guard-rspec
+  guard-shell
   guard-spring
   jquery-rails
   json_spec
   launchy
+  material_icons
   materialize-sass
   meta_request
   parallel_tests (~> 1)

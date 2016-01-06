@@ -14,6 +14,7 @@ Rails.application.routes.draw do
             concerns: [:votable] do
     resources :answers,
               concerns: [:votable],
+              shallow: true,
               except: [:index, :edit, :new] do
       member do
         post :best

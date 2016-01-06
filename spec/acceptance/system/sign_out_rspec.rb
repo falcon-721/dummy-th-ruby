@@ -1,11 +1,6 @@
-require_relative '../acceptance_helper'
+require 'acceptance_helper'
 
-feature 'User sign in', %q{
-  In order to be able to close session
-  As an Signed in User
-  I want to be able to sign out
-} do
-
+feature 'User sign in', js: true do
   given(:user) { create(:user) }
 
   scenario 'Signed in user try to sign out' do

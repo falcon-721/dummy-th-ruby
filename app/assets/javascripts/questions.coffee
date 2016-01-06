@@ -7,6 +7,7 @@ $ ->
     questionForm.show()
     questionForm.find(".cancel-btn").one 'click', ->
       questionForm.hide()
+    false
 
   questionForm.on 'ajax:success', (e, data, status, xhr) ->
     App.utils.successMessage(data?.message)

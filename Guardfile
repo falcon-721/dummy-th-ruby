@@ -55,3 +55,7 @@ group 'server' do
     watch(%r{^(config|lib)/.*})
   end
 end
+
+guard :shell do
+  watch(%r{(tmp\/capybara_output/.*\.png$)}) { |m| `subl #{m[1]}` }
+end
