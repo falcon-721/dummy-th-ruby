@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
       @context.private_pub_channel,
       type: 'comment',
       kind: 'create',
-      comment: @comment.serialized
+      comment: @comment
     )
   end
 end

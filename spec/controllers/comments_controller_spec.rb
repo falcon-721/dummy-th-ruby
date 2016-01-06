@@ -11,7 +11,7 @@ describe CommentsController do
     context 'Comments for Question' do
       it 'change questions comment count' do
         expect {
-          post :create, question_id: question, comment: attributes_for(:comment, commentable: 'Question'), format: :js
+          post :create, question_id: question, comment: attributes_for(:comment), context: 'question', format: :js
         }.to change(question.comments, :count).by(1)
       end
     end
@@ -19,7 +19,7 @@ describe CommentsController do
     context 'Comments for Answer' do
       it 'change answers comments count' do
         expect {
-          post :create, question_id: question, answer_id: answer, comment: attributes_for(:comment, commentable: 'Answer'), format: :js
+          post :create, question_id: question, answer_id: answer, comment: attributes_for(:comment), context: 'answer', format: :js
         }.to change(answer.comments, :count).by(1)
       end
     end
@@ -27,13 +27,13 @@ describe CommentsController do
     context 'Invalid comment' do
       it 'not create comment for question' do
         expect {
-          post :create, question_id: question, comment: attributes_for(:invalid_comment, commentable: 'Question'), format: :js
+          post :create, question_id: question, comment: attributes_for(:invalid_comment), context: 'question', format: :js
         }.to_not change(Comment, :count)
       end
 
       it 'not create comment for answer' do
         expect {
-          post :create, question_id: question, answer_id: answer, comment: attributes_for(:invalid_comment, commentable: 'Answer'), format: :js
+          post :create, question_id: question, answer_id: answer, comment: attributes_for(:invalid_comment), context: 'question', format: :js
         }.to_not change(Comment, :count)
       end
     end

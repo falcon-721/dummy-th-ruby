@@ -49,7 +49,7 @@ class AnswersController < ApplicationController
     PrivatePub.publish_to(
       "/questions/#{@question.id}",
       type: 'answer',
-      answer: @answer.serialized
+      answer: @answer
     )
   end
 end

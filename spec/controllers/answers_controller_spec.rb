@@ -186,9 +186,9 @@ describe AnswersController do
         end
       end
 
-      xit 'responds with JSON object' do
+      it 'responds with JSON object' do
         post :vote_down, question_id: question, id: another_answer
-        expect(response.body).to be_json_eql(another_answer.id).at_path('voted_to_id')
+        expect(response.body).to be_json_eql(another_answer.id).at_path('votable_id')
       end
     end
 
