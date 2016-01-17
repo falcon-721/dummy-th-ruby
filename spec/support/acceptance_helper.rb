@@ -13,4 +13,9 @@ module AcceptanceHelper
     )
     page.save_screenshot path
   end
+
+  # Wait materialize-css animation completes
+  def wait_animation
+    sleep 0.2
+  end
 end

@@ -1,31 +1,42 @@
 require 'acceptance_helper'
 
-feature 'Destroy Question', %q{
-  In order to destroy  question
-  For Question Owner
-  I want to destroy question
-} do
-
+feature 'destroy question', :js do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given(:another_question) { create(:question) }
 
-  scenario 'Signed in User(owner) can destroy question' do
-    sign_in user
-    visit question_path question
-
-    click_on 'Delete question'
-    expect(page).to have_content 'Your question deleted.'
+  shared_examples "cannot destroy question" do
+    scenario "cannot see delete button" do
+      within ".question-controls" do
+        expect(page).to have_no_link("Delete")
+      end
+    end
   end
 
-  scenario 'Non-sign in user dont have delete question link' do
-    visit question_path question
-    expect(page).to_not have_link 'Delete question'
+  context "as user" do
+    background do
+      sign_in(user)
+      visit question_path(question)
+    end
+
+    scenario "destroys question", :aggregate_failures do
+      within ".question-controls" do
+        click_on 'Delete'
+      end
+      expect(page).to have_content "Your question has been successfully removed"
+      expect(current_path).to eq questions_path
+      expect(page).to have_no_content(question.title)
+    end
+
+    context "non-owner" do
+      given(:question) { create(:question) }
+
+      it_behaves_like "cannot destroy question"
+    end
   end
 
-  scenario 'Not owner dont have delete question link' do
-    sign_in user
-    visit question_path another_question
-    expect(page).to_not have_link 'Delete question'
+  context "as guest" do
+    background { visit question_path(question) }
+
+    it_behaves_like "cannot destroy question"
   end
 end

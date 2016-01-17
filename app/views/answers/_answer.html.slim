@@ -1,25 +1,25 @@
 .answer.collection-item.section id=dom_id(answer)
-  - if answer.best?
-    span.badge best
-  p.answer-body =answer.body
-  = render 'shared/votes', votable: answer
+  .answer-info
+    - if answer.best?
+      span.badge.green.white-text.answer-best-badge best
+    p.answer-body =answer.body
+    = render 'shared/votes', votable: answer
 
-  .answer-controls
-    .row
-      - if policy(answer).update?
-        .col
-          = link_to 'Edit', '#', class: 'edit-answer-link'
-      - if policy(answer).destroy?
-        .col
-          = link_to 'Delete', answer, method: :delete, remote: true, class: 'delete-answer-link'
-      - if policy(answer).best?
-        .col
-          = link_to 'Best answer', best_answer_path(answer),
-              remote: true,
-              method: :post,
-              class: 'best-answer-link'
+    .answer-controls
+      .row
+        - if policy(answer).update?
+          .col
+            = link_to 'Edit', '#', class: 'edit-answer-link'
+        - if policy(answer).destroy?
+          .col
+            = link_to 'Delete', answer, method: :delete, remote: true, class: 'delete-answer-link'
+        - if policy(answer).best?
+          .col
+            = link_to 'Best answer', best_answer_path(answer),
+                remote: true,
+                method: :post,
+                class: 'best-answer-link'
   - if policy(answer).update?
     = render 'answers/form', id: "answer_form_#{answer.id}", answer: answer
-
 
   / = render partial: 'comments/list', locals: { commentable: answer, comment: answer.comments.build }

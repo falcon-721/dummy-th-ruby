@@ -15,5 +15,5 @@
 //= require jquery_ujs
 //= require materialize-sprockets 
 //= require private_pub
-//= require ./utils
-//= require_tree .
+//= require ./shared/utils
+//= require_tree ./templates

@@ -1,12 +1,14 @@
-window.App = {}
+App = window.App = {}
 
-window.App.utils = 
+App.utils = 
   successMessage: (message) ->
     return unless message
+    console.info(message)
     Materialize.toast(message, 2000, 'green')
 
   errorMessage: (message) ->
     return unless message
+    console.warn(message)
     Materialize.toast(message, 4000, 'red')
 
   ajaxErrorHandler: (e, data) ->
@@ -19,6 +21,9 @@ window.App.utils =
       message = data.responseText
 
     App.utils.errorMessage message
+
+  render: (template, data) ->
+    JST["templates/#{template}"](data)
 
 $ ->
   App.utils.successMessage(App.flash?.success)

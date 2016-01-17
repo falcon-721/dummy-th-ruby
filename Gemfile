@@ -12,6 +12,7 @@ gem 'jquery-rails'
 gem 'materialize-sass'
 gem 'material_icons'
 
+gem 'skim'
 gem 'pundit'
 gem 'active_model_serializers'
 
@@ -57,6 +58,7 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-rspec', require: false
   gem 'guard-spring', require: false
-  gem 'guard-shell', require: false
+  gem 'guard-livereload', require: false
+  gem 'rack-livereload'
   gem 'terminal-notifier-guard', require: false
 end

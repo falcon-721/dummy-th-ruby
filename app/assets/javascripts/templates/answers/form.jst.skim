@@ -1,0 +1,13 @@
+.answer-edit-form style="display: none;" id="#answer_form_#{@id}"
+  form action="/answers/#{@id}" data-remote="true" method="post" accepts-charset="UTF-8"
+    input name="utf8" type="hidden" value="✓"
+    input type="hidden" name="_method" value="patch"
+    .row
+      .input-field.col.s12
+        label for="answer_body_#{@id}" Body
+        textarea.materialize-textarea name="answer[body]" id="answer_body_#{@id}" =@body
+    .row
+      .col
+        input.waves-effect.waves-light.btn type="submit" name="commit" value="Save"
+      .col
+        .btn.cancel-btn.grey.waves-effect.waves-light.lighten-4.black-text Cancel

@@ -3,7 +3,7 @@ html
   head
     title TH Demo
     = Gon::Base.render_data
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = csrf_meta_tags
   body
     .navbar-fixed
@@ -23,6 +23,7 @@ html
       = yield
 
     .footer
+      = Gon::Base.render_data
       = javascript_include_tag 'application'
       = yield :scripts
       = render_flash

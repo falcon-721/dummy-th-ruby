@@ -1,44 +1,42 @@
 require 'acceptance_helper'
 
-feature 'Destroy Answer', %q{
-  In order to destroy answer
-  For Answer Owner
-  I want to destroy answer
-} do
-
+feature 'destroy answer', :js do
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given(:answer) { create(:answer, user: user, question: question) }
-  given(:another_answer) { create(:answer, user: create(:user), question: question) }
+  given!(:answer) { create(:answer, user: user, question: question) }
 
-  context 'Author' do
-    before do
-      answer
-      sign_in user
-      visit question_path question
-    end
-
-    scenario 'can destroy answer', js: true do
-      click_on 'Delete answer'
-      expect(page).to have_content 'Your answer deleted.'
-    end
-
-    scenario 'deleted answer should remove from page', js: true do
-      click_on 'Delete answer'
-      expect(page).to_not have_selector ("div#answer-id-#{answer.id}")
+  shared_examples "cannot destroy answer" do
+    scenario "cannot see delete button" do
+      within "#answer_#{answer.id} .answer-controls" do
+        expect(page).to have_no_link("Delete")
+      end
     end
   end
 
-  scenario 'non-sign in user dont have delte link' do
-    answer
-    visit question_path question
-    expect(page).to_not have_link 'Delete answer'
+  context "as user" do
+    background do
+      sign_in(user)
+      visit question_path(question)
+    end
+
+    scenario "destroys answer", :aggregate_failures do
+      within "#answer_#{answer.id} .answer-controls" do
+        click_on 'Delete'
+      end
+      expect(page).to have_content "Your answer has been successfully removed"
+      expect(page).to have_no_content(answer.body)
+    end
+
+    context "non-owner" do
+      given(:answer) { create(:answer, question: question) }
+
+      it_behaves_like "cannot destroy answer"
+    end
   end
 
-  scenario 'Not owner dont have delte link' do
-    another_answer
-    sign_in user
-    visit question_path question
-    expect(page).to_not have_link 'Delete answer'
+  context "as guest" do
+    background { visit question_path(question) }
+
+    it_behaves_like "cannot destroy answer"
   end
 end

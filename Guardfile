@@ -54,8 +54,9 @@ group 'server' do
     watch('Gemfile.lock')
     watch(%r{^(config|lib)/.*})
   end
-end
 
-guard :shell do
-  watch(%r{(tmp\/capybara_output/.*\.png$)}) { |m| `subl #{m[1]}` }
+  guard 'livereload' do
+    watch(%r{views/.+\.(slim|js)$})
+    watch(%r{assets/.+\.(js|css|coffee|sass|skim)$})
+  end
 end

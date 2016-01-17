@@ -1,0 +1,18 @@
+.answer.collection-item.section id="answer_#{@id}"
+  .answer-info
+    - if @best
+      span.badge.green.white-text.answer-best-badge best
+    p.answer-body =@body
+    == App.utils.render('shared/votes', votable: @, path: "/answers/#{@id}/")
+    .answer-controls
+      .row
+        - if @user_id == gon.user_id
+          .col
+            a.edit-answer-link href="#" Edit
+          .col
+            a.delete-answer-link data-remote="true" rel="nofollow" data-method="delete" href="/answers/#{@id}" Delete
+        - if gon.question_user_id == gon.user_id && !@best
+          .col
+            a.best-answer-link data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@id}/best" Best answer
+  - if @user_id == gon.user_id
+    == App.utils.render('answers/form', @)

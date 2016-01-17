@@ -22,6 +22,13 @@ module Sof
     config.autoload_paths += %W(#{config.root}/app/serializers/concerns/
                                 #{config.root}/app/policies/concerns/)
 
+    # add all upper level assets
+    config.assets.precompile +=
+    Dir[Rails.root.join('app/assets/*/*.{js,css,coffee,sass,scss}*')]
+    .map { |i| File.basename(i).sub(/(\.js)?\.coffee$/, '.js') }
+    .map { |i| File.basename(i).sub(/(\.css)?\.(sass|scss)$/, '.css') }
+    .reject { |i| i =~ /^application\.(js|css)$/ }
+
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 

@@ -12,6 +12,8 @@ Dir[Rails.root.join("spec/shared_examples/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+PrivatePub.fake!
+
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers

@@ -1,38 +1,46 @@
 require 'acceptance_helper'
 
-feature 'Create Answer for Question', %q{
-  In order to create Answer for Question
-  For Signed in User
-  i want to create answer
-} do
-
+feature "create answer", :js do
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
-  scenario 'Signed in user try to create answer', js: true do
-    sign_in user
-    visit question_path question
-
-    fill_in 'Answer body', with: 'My Answer'
-    click_on 'Create Answer'
-    within 'div.answers' do
-      expect(page).to have_content 'My Answer'
+  context "as user" do
+    background do
+      sign_in(user)
+      visit question_path(question)
     end
-    expect(current_path).to eq question_path(question)
+
+    scenario "creates answer", :aggregate_failures do
+      page.find("#add_answer_btn").trigger('click')
+
+      within "#new_answer_form" do
+        fill_in 'Body', with: 'test text'
+        click_on 'Save'
+      end
+
+      expect(page).to have_content "Your answer has been successfully created"
+      expect(page).to have_content "test text"
+    end
+
+    scenario "invalid answer data" do
+      page.find("#add_answer_btn").trigger('click')
+
+      within "#new_answer_form" do
+        fill_in 'Body', with: ''
+        click_on 'Save'
+      end
+
+      expect(page).to have_content "Body can't be blank"
+    end
   end
 
-  scenario 'Signed in user try to create answer with invalid params', js: true do
-    sign_in user
-    visit question_path question
+  context "as guest" do
+    given(:question) { create(:question, title: 'My question', body: 'What are you waiting for?') }
 
-    fill_in 'Answer body', with: ''
-    click_on 'Create Answer'
-    expect(page).to have_content 'Body can\'t be blank'
-  end
+    background { visit question_path(question) }
 
-  scenario 'non-authorized user dont have Create Answer form' do
-    visit question_path question
-    expect(page).to_not have_selector('form#new_answer')
-    expect(page).to_not have_selector('input[type=submit][value=\'Create Answer\']')
+    it "have no add button", :visual do
+      expect(page).to match_expectation
+    end
   end
 end

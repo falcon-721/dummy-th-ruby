@@ -1,65 +1,68 @@
 require 'acceptance_helper'
 
-feature 'Choose best answer', %q{
-  In order to choose best answer for question
-  For Question Author
-  i want choose answer
-} do
-
+feature 'choose best answer', :js do
   given(:user) { create(:user) }
-  given(:another_user) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given!(:answers) { create_list(:answer, 2, question: question) }
+  given!(:answer) { create(:answer, question: question) }
 
-  describe 'Question Author' do
-    before do
-      sign_in user
-      visit question_path question
-    end
-
-    scenario 'have Best answer links' do
-      within('.answers') do
-        expect(page).to have_link('Best answer')
-      end
-    end
-
-    scenario 'choose 2 times', js: true do
-      all('a.best-answer-link')[0].click
-      all('a.best-answer-link')[1].click
-      within('.answers') do
-        expect(page).to have_selector('p#best-answer', count: 1)
+  shared_examples "cannot choose best answer" do
+    scenario "cannot see Best link" do
+      within "#answer_#{answer.id} .answer-controls" do
+        expect(page).to have_no_link("Best answer")
       end
     end
   end
 
-  context "best answer is first" do
-    given!(:answer) { create(:answer, question: question) }
-    given!(:best_answer) { create(:answer, question: question, best: true) }
+  context "as user" do
+    context "as question author" do
+      given!(:answer2) { create(:answer, question: question, best: true) }
 
-    specify do
-      visit question_path(question)
-      within(".answer:first-child") do
-        expect(page).to have_selector('p#best-answer')
+      background do
+        sign_in(user)
+        visit question_path(question)
       end
 
-      within(".answer:last-child") do
-        expect(page).not_to have_selector('p#best-answer')
+      scenario "best answer is first in the list", :aggregate_failures do
+        within ".answers .answer:first-child" do
+          expect(page).to have_content(answer2.body)
+          expect(page).to have_content('best')
+        end
       end
+
+      scenario "chooses best answer", :aggregate_failures do
+        within "#answer_#{answer.id} .answer-controls" do
+          click_on "Best answer"
+        end
+
+        expect(page).to have_content "You have successfully chosen the best answer"
+
+        within ".answers .answer:first-child" do
+          expect(page).to have_content(answer.body)
+          expect(page).to have_content('best')
+        end
+
+        within ".answers .answer:last-child" do
+          expect(page).to have_content(answer2.body)
+          expect(page).to have_no_content('best')
+        end
+      end
+    end
+
+    context "not question author" do
+      given(:question) { create(:question) }
+
+      background do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      it_behaves_like "cannot choose best answer"
     end
   end
 
-  scenario 'Not a question Author dont have best answer links' do
-    sign_in another_user
-    visit question_path question
-    within('.answers') do
-      expect(page).to_not have_link('Best answer')
-    end
-  end
+  context "as guest" do
+    background { visit question_path(question) }
 
-  scenario 'Non-authed user dont have best answer links' do
-    visit question_path question
-    within('.answers') do
-      expect(page).to_not have_link('Best answer')
-    end
+    it_behaves_like "cannot choose best answer"
   end
 end

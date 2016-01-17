@@ -27,3 +27,12 @@ en:
       message: "Your question has been successfully removed"
     update:
       message: "Your question has been successfully updated"
+  answers:
+    create:
+      message: "Your answer has been successfully created"
+    destroy:
+      message: "Your answer has been successfully removed"
+    update:
+      message: "Your answer has been successfully updated"
+    best:
+      message: "You have successfully chosen the best answer"

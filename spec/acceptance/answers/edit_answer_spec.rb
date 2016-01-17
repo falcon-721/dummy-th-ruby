@@ -1,64 +1,73 @@
 require 'acceptance_helper'
 
-feature 'Edit Answer for Question', %q{
-  In order to Edit answer for Question
-  For Answer Author
-  i want to edit answer
-} do
-
+feature "edit answer", :js do
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
-  given!(:another_user_answer) { create(:answer, question: question) }
+  given(:question) { create(:question, user: user) }
+  given!(:answer) { create(:answer, question: question, user: user) }
 
-  describe 'Author' do
-    given!(:answer) { create(:answer, user: user, question: question) }
-    before :each do
-      sign_in user
-      visit question_path question
-    end
-
-    scenario 'have edit link and form' do
-      within('.answers') do
-        expect(page).to have_link('Edit')
-        click_on 'Edit'
-        expect(page).to have_selector 'form.edit_answer textarea'
+  shared_examples "cannot edit answer" do
+    scenario "cannot see edit link" do
+      within "#answer_#{answer.id} .answer-controls" do
+        expect(page).to have_no_link("Edit")
       end
-    end
-
-    scenario 'can edit his answer', js: true do
-      click_on 'Edit'
-      within 'form.edit_answer' do
-        fill_in 'Answer', with: 'edited answer'
-      end
-      click_on 'Save'
-
-      expect(page).to_not have_content answer.body
-      expect(page).to have_content 'edited answer'
-      expect(page).to have_selector 'textarea'
-    end
-
-    scenario 'with invalid attr should see errors', js: true do
-      click_on 'Edit'
-      within 'form.edit_answer' do
-        fill_in 'Answer', with: ''
-      end
-      click_on 'Save'
-
-      expect(page).to have_content 'Body can\'t be blank'
     end
   end
 
-  scenario 'Non-authorized user dont have edit link' do
-    visit question_path question
-    within('.answers') do
-      expect(page).to_not have_link('Edit')
+  context "as user" do
+    background do
+      sign_in(user)
+      visit question_path(question)
+    end
+
+    context "as author" do
+      background do
+        within "#answer_#{answer.id} .answer-controls" do
+          click_on 'Edit'
+        end
+      end
+
+      scenario "updates answer", :aggregate_failures do
+        within "#answer_#{answer.id} .answer-edit-form" do
+          fill_in 'Body', with: 'Edited body'
+          click_on 'Save'
+        end
+
+        expect(page).to have_content "Your answer has been successfully updated"
+
+        expect(page).to have_no_content answer.body
+        expect(page).to have_content 'Edited body'
+      end
+
+      scenario "invalid params" do
+        within "#answer_#{answer.id} .answer-edit-form" do
+          fill_in 'Body', with: ''
+          click_on 'Save'
+        end
+
+        expect(page).to have_content 'Body can\'t be blank'
+      end
+
+      context "markup", :visual do
+        given(:question) { create(:question, title: 'My question', body: 'What are you waiting for?') }
+        given!(:answer) { create(:answer, body: 'For the sun', question: question, user: user) }
+
+        scenario "edit form" do
+          wait_animation
+          expect(page).to match_expectation
+        end
+      end
+    end
+
+    context "non-owner" do
+      given(:answer) { create(:answer, question: question) }
+
+      it_behaves_like "cannot edit answer"
     end
   end
 
-  scenario 'Not the author dont have edit link' do
-    sign_in user
-    visit question_path question
+  context "as guest" do
+    background { visit question_path(question) }
 
-    expect(page).to_not have_link('Edit')
+    it_behaves_like "cannot edit answer"
   end
 end

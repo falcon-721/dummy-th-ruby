@@ -7,10 +7,10 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :permission_error
 
   before_action :authenticate_user!, unless: :devise_controller?
+  before_action :gon_user, unless: :devise_controller?
 
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index, unless: :devise_controller?
-  after_action :gon_user, unless: :devise_controller?
 
   private
 

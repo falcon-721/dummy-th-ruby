@@ -1,0 +1,15 @@
+.votes.row
+  .col.chip.votes-sum 0
+  - if @votable.user_id != gon.user_id
+    .col.vote-up-chip
+      a.vote-link.chip data-remote="true" rel="nofollow" data-method="post" href="#{@path}/vote_up"
+        | Like
+        i.material-icons.green-text.no-events thumb_up
+    .col.vote-down-chip
+      a.vote-link.chip data-remote="true" rel="nofollow" data-method="post" href="#{@path}/vote_down"
+        | Dilike
+        i.material-icons.green-text.no-events thumb_down
+    .col.vote-cancel-chip
+      a.vote-link.chip data-remote="true" rel="nofollow" data-method="post" href="#{@path}/cancel_vote"
+        | Cancel
+        i.material-icons.no-events close

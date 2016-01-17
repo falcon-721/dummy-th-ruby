@@ -1,6 +1,6 @@
 require 'acceptance_helper'
 
-feature 'User sign in', js: true do
+feature 'user sign out', js: true do
   given(:user) { create(:user) }
 
   scenario 'Signed in user try to sign out' do

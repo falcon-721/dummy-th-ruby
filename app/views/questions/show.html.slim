@@ -7,4 +7,5 @@
   = render 'answers/form', id: 'new_answer_form', answer: @question.answers.new
 
 = content_for :scripts
+  = javascript_include_tag 'answers'
   = subscribe_to "/questions/#{@question.id}"

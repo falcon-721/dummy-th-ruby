@@ -9,13 +9,14 @@ feature 'create question', :js do
       visit questions_path
     end
 
-    scenario 'creates qustion with valid params' do
+    scenario 'creates qustion with valid params', :aggregate_failures do
       page.find("#add_question_btn").trigger('click')
 
       fill_in 'Title', with: 'Test question'
       fill_in 'Body', with: 'test text'
       click_on 'Save'
-      expect(page).to have_content 'Your question successfully created.'
+      expect(page).to have_content 'Test question'
+      expect(page).to have_content 'test text'
     end
 
     scenario 'can not create question with invalid params' do

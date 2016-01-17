@@ -11,6 +11,10 @@ class QuestionsController < ApplicationController
     @questions = policy_scope(Question)
   end
 
+  def show
+    gon.question_user_id = @question.user_id
+  end
+
   def create
     authorize Question
     @question = current_user.questions.create(question_params)
