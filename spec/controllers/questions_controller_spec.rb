@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   render_views
-  let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
 
   describe "GET #show" do
@@ -105,7 +104,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #vote_up' do
-    let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:another_question) { create(:question) }
 
@@ -162,7 +160,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #vote_down' do
-    let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:another_question) { create(:question) }
 
@@ -219,7 +216,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #cancel_vote' do
-    let(:user) { create(:user) }
     let(:question) { create(:question) }
     let!(:vote) { create(:vote, votable: question, user: user, value: 1) }
 

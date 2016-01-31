@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe AnswersController do
   let(:question) { create(:question) }
-  let(:user) { create(:user) }
 
   describe "POST #create" do
     before { sign_in(user) }
@@ -65,7 +64,6 @@ describe AnswersController do
   end
 
   describe 'POST #best' do
-    let(:another_user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, question: question) }
 
@@ -91,7 +89,7 @@ describe AnswersController do
     end
 
     context 'Not question author' do
-      before { sign_in another_user }
+      before { sign_in john }
       it 'not change best attr' do
         post :best, id: answer, format: :js
         answer.reload
@@ -101,7 +99,6 @@ describe AnswersController do
   end
 
   describe 'POST #vote_up' do
-    let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question, user: user) }
     let(:another_answer) { create(:answer, question: question) }
@@ -159,7 +156,6 @@ describe AnswersController do
   end
 
   describe 'POST #vote_down' do
-    let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question, user: user) }
     let(:another_answer) { create(:answer, question: question) }
@@ -207,7 +203,6 @@ describe AnswersController do
   end
 
   describe 'POST #cancel_vote' do
-    let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question) }
     let!(:vote) { create(:vote, user: user, votable: answer, value: 1) }

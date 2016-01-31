@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe CommentsController do
   describe 'POST #create' do
-    let(:user) { create(:user) }
     let!(:question) { create(:question) }
     let!(:answer) { create(:answer, question: question) }
 
