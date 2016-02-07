@@ -1,10 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe QuestionsController, type: :controller do
-  render_views
+describe QuestionsController, :auth do
   let(:question) { create(:question, user: user) }
 
-  describe "GET #show" do
+  describe "GET #show", :unauth do
+    render_views
+
     specify do
       get :show, id: question
       expect(response).to be_success
@@ -12,219 +13,49 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe "POST #create" do
-    before { sign_in(user) }
+    let(:form_params) { {} }
+    let(:params) { { question: attributes_for(:question).merge(form_params) } }
+    subject { post :create, params }
 
-    context "with valid params" do
-      it "create new question" do
-        expect {
-          post :create, question: attributes_for(:question)
-        }.to change(user.questions, :count).by(1)
-      end
-
-      it 'have right question owner' do
-        expect{
-          post :create, question: attributes_for(:question)
-        }.to change(user.questions, :count).by(1)
-      end
+    it "creates new question" do
+      expect { subject }.to change(user.questions, :count).by(1)
     end
 
-    context "with invalid params" do
-      it 'not create new question' do
-        expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
-      end
+    it_behaves_like "invalid params", "empty title", model: Question do
+      let(:form_params) { { title: '' } }
+    end
+
+    it_behaves_like "invalid params", "empty body", model: Question do
+      let(:form_params) { { body: '' } }
     end
   end
 
   describe 'DELETE #destroy' do
-    let!(:another_question) { create(:question) }
+    let!(:question) { create(:question, user: user) }
 
-    context 'signed in question owner' do
-      before { sign_in(user) }
+    subject { delete :destroy, id: question }
 
-      let!(:question) { create(:question, user: user) }
-
-      context 'question owner' do
-        it 'destroy question' do
-          expect { delete :destroy, id: question }.to change(user.questions, :count).by(-1)
-        end
-      end
-
-      context 'Not question owner' do
-        it 'not destroy question' do
-          expect{ delete :destroy, id: another_question }.to_not change(Question, :count)
-        end
-      end
+    it "destroys question" do
+      expect { subject }.to change(Question, :count).by(-1)
     end
 
-    context 'Non-signed in user' do
-     it 'not destroy question' do
-       expect{ delete :destroy, id: another_question }.to_not change(Question, :count)
-     end
+    it_behaves_like "invalid params", "non-owner", model: Question, code: 302 do
+      let!(:question) { create(:question) }
     end
   end
 
   describe 'PATCH #update' do
-    context 'Non-signed user' do
-      it 'not change question' do
-        expect {
-          patch :update, id: question, question: attributes_for(:question), format: :js
-        }.to_not change{question}
-      end
-    end
+    let(:form_params) { { title: 'Edited title', body: 'Edited body' } }
+    let(:params) { { id: question, question: form_params } }
+    subject { patch :update, params }
 
-    context 'Signed in user' do
-      before { sign_in user }
-
-      context 'with valid attrs' do
-        it 'change title' do
-          patch :update, id: question, question: { title: 'Edited title', body: 'Edited body' }, format: :js
-          question.reload
-          expect(question.title).to eq 'Edited title'
-        end
-        it 'change body' do
-          patch :update, id: question, question: { title: 'Edited title', body: 'Edited body' }, format: :js
-          question.reload
-          expect(question.body).to eq 'Edited body'
-        end
-      end
-
-      context 'with invalid params' do
-        it 'not change title' do
-          expect {
-            patch :update, id: question, question: { title: '', body: 'Edited body' }, format: :js
-          }.to_not change(question, :title)
-        end
-        it 'not change body' do
-          expect {
-            patch :update, id: question, question: { title: 'Edited title', body: '' }, format: :js
-          }.to_not change(question, :body)
-        end
-      end
+    it 'changes title and body', :aggregate_failures do
+      subject
+      question.reload
+      expect(question.title).to eq 'Edited title'
+      expect(question.body).to eq 'Edited body'
     end
   end
 
-  describe 'POST #vote_up' do
-    let(:question) { create(:question, user: user) }
-    let(:another_question) { create(:question) }
-
-    before { sign_in user }
-    context 'not qusetion autor can vote for Question' do
-      it 'change Votes count' do
-        expect {
-          post :vote_up, id: another_question
-        }.to change(another_question.votes, :count).by(1)
-      end
-
-      it 'have votes sum' do
-        post :vote_up, id: another_question
-        expect(another_question.votes_sum).to eq 1
-      end
-
-      context 'double vote' do
-        before { post :vote_up, id: another_question }
-        it 'not change Votes count' do
-          expect {
-            post :vote_up, id: another_question
-          }.to_not change(another_question.votes, :count)
-        end
-      end
-
-      context 're-vote' do
-        let!(:vote) { create(:vote, user: user, votable: another_question, value: -1) }
-        it 'not change Votes count' do
-          expect {
-            post :vote_up, id: another_question
-          }.to_not change(another_question.votes, :count)
-        end
-
-        it 'change vote.value' do
-          post :vote_up, id: another_question
-          vote.reload
-          expect(vote.value).to eq 1
-        end
-      end
-    end
-
-    context 'question author can not vote for Question' do
-      it 'not change Votes count' do
-        expect {
-          post :vote_up, id: question
-        }.to_not change(Vote, :count)
-      end
-
-      it 'have votes sum' do
-        post :vote_up, id: question
-        expect(another_question.votes_sum).to eq 0
-      end
-    end
-  end
-
-  describe 'POST #vote_down' do
-    let(:question) { create(:question, user: user) }
-    let(:another_question) { create(:question) }
-
-    before { sign_in user }
-    context 'not question autor can vote for Question' do
-      it 'change Votes count' do
-        expect {
-          post :vote_down, id: another_question
-        }.to change(another_question.votes, :count).by(1)
-      end
-
-      it 'have votes sum' do
-        post :vote_down, id: another_question
-        expect(another_question.votes_sum).to eq -1
-      end
-
-      context 'double vote' do
-        before { post :vote_down, id: another_question }
-        it 'not change Votes count' do
-          expect {
-            post :vote_down, id: another_question
-          }.to_not change(another_question.votes, :count)
-        end
-      end
-
-      context 're-vote' do
-        let!(:vote) { create(:vote, user: user, votable: another_question, value: 1) }
-        it 'not change Votes count' do
-          expect {
-            post :vote_down, id: another_question
-          }.to_not change(another_question.votes, :count)
-        end
-
-        it 'change vote.value' do
-          post :vote_down, id: another_question
-          vote.reload
-          expect(vote.value).to eq -1
-        end
-      end
-    end
-
-    context 'question author can not vote for Question' do
-      it 'not change Votes count' do
-        expect {
-          post :vote_down, id: question
-        }.to_not change(Vote, :count)
-      end
-
-      it 'have votes sum' do
-        post :vote_down, id: question
-        expect(another_question.votes_sum).to eq 0
-      end
-    end
-  end
-
-  describe 'POST #cancel_vote' do
-    let(:question) { create(:question) }
-    let!(:vote) { create(:vote, votable: question, user: user, value: 1) }
-
-    before { sign_in user }
-
-    it 'destroy vote' do
-      expect {
-        post :cancel_vote, id: question
-      }.to change(Vote, :count).by(-1)
-    end
-  end
+  it_behaves_like "voted", :question
 end

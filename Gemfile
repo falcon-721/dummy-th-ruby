@@ -33,10 +33,10 @@ group :development, :test do
   gem 'meta_request'
   gem 'quiet_assets'
   gem 'faker'
+  gem 'parallel_tests', '~> 1'
 end
 
 group :test do
-  gem 'parallel_tests', '~> 1'
   gem 'rspec-rails'
   gem 'poltergeist'
   gem 'shoulda-matchers'

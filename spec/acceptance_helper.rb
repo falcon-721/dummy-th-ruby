@@ -7,7 +7,7 @@ RSpec.configure do |config|
   config.include AcceptanceHelper, type: :feature
 
   Capybara.server_host = "0.0.0.0"
-  Capybara.server_port = 3001
+  Capybara.server_port = 3001 + ENV['TEST_ENV_NUMBER'].to_i
   Capybara.default_max_wait_time = 2
   Capybara.save_and_open_page_path = "./tmp/capybara_output"
 

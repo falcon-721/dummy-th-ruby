@@ -1,40 +1,39 @@
 require 'rails_helper'
 
-describe CommentsController do
+describe CommentsController, :auth do
+
+  shared_examples "comments #create" do |context_name|
+    context context_name do
+      it "change comments count" do
+        expect { subject }.to change(context.comments, :count).by(1)
+      end
+
+      it_behaves_like "invalid params", "empty body", model: Comment do
+        let(:form_params) { { body: '' } }
+      end
+    end
+  end
+
   describe 'POST #create' do
     let!(:question) { create(:question) }
     let!(:answer) { create(:answer, question: question) }
 
-    before { sign_in user }
+    let(:form_params) { {} }
 
-    context 'Comments for Question' do
-      it 'change questions comment count' do
-        expect {
-          post :create, question_id: question, comment: attributes_for(:comment), context: 'question', format: :js
-        }.to change(question.comments, :count).by(1)
-      end
+    let(:params) do
+      { comment: attributes_for(:comment).merge(form_params), format: :js }.merge(context_params)
     end
 
-    context 'Comments for Answer' do
-      it 'change answers comments count' do
-        expect {
-          post :create, answer_id: answer, comment: attributes_for(:comment), context: 'answer', format: :js
-        }.to change(answer.comments, :count).by(1)
-      end
+    subject { post :create, params }
+
+    it_behaves_like "comments #create", "question" do
+      let(:context_params) { { question_id: question, context: 'question' } }
+      let(:context) { question }
     end
 
-    context 'Invalid comment' do
-      it 'not create comment for question' do
-        expect {
-          post :create, question_id: question, comment: attributes_for(:invalid_comment), context: 'question', format: :js
-        }.to_not change(Comment, :count)
-      end
-
-      it 'not create comment for answer' do
-        expect {
-          post :create, answer_id: answer, comment: attributes_for(:invalid_comment), context: 'answer', format: :js
-        }.to_not change(Comment, :count)
-      end
+    it_behaves_like "comments #create", "answer" do
+      let(:context_params) { { answer_id: answer, context: 'answer' } }
+      let(:context) { answer }
     end
   end
 end
