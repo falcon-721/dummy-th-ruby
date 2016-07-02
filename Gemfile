@@ -22,6 +22,8 @@ gem 'puma'
 gem 'gon'
 
 group :development, :test do
+  gem 'dev_log_in', '~> 1.1.0'
+
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'pry-rescue'

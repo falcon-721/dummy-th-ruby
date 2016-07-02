@@ -8,6 +8,10 @@ describe CommentsController, :auth do
         expect { subject }.to change(context.comments, :count).by(1)
       end
 
+      it "transmits message" do
+        expect { subject }.to transmit_to(context.private_pub_channel)
+      end
+
       it_behaves_like "invalid params", "empty body", model: Comment do
         let(:form_params) { { body: '' } }
       end

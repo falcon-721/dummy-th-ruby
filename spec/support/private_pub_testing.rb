@@ -9,6 +9,10 @@ module PrivatePubTesting
     def push(channel, data)
       (@channels[channel] ||= []) << data
     end
+
+    def clear
+      @channels = {}
+    end
   end
 
   def publish_to(channel, data)
@@ -42,6 +46,10 @@ module PrivatePubTesting
 
   def testing_mailbox
     @testing_mailbox ||= Mailbox.new
+  end
+
+  def cleanup_testing
+    testing_mailbox.clear
   end
 end
 

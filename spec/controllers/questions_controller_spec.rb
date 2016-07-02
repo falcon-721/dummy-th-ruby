@@ -21,6 +21,10 @@ describe QuestionsController, :auth do
       expect { subject }.to change(user.questions, :count).by(1)
     end
 
+    it 'transmits message' do
+      expect { subject }.to transmit_to('/questions')
+    end
+
     it_behaves_like "invalid params", "empty title", model: Question do
       let(:form_params) { { title: '' } }
     end

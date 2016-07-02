@@ -24,6 +24,10 @@ describe AnswersController, :auth do
       expect { subject }.to change(user.answers, :count).by(1)
     end
 
+    it 'transmits message' do
+      expect { subject }.to transmit_to("/questions/#{question.id}")
+    end
+
     it_behaves_like "invalid params", "invalid answer", model: Answer do
       let(:form_params) { attributes_for(:invalid_answer) }
     end
