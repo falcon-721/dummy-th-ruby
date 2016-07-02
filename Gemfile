@@ -23,6 +23,7 @@ gem 'gon'
 
 group :development, :test do
   gem 'dev_log_in', '~> 1.1.0'
+  gem 'launchy'
 
   gem 'pry-byebug'
   gem 'pry-rails'

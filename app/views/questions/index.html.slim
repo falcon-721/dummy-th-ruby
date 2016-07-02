@@ -1,10 +1,10 @@
 h3 Questions
-- if @questions.any?
-  .questions-list.collection
+.questions-list.collection
+  - if @questions.any?
     = render @questions
-- else
-  .row
-    .col.s6.offset-s3.center No questions found(
+  - else
+    div
+      .col.s6.offset-s3.center No questions found(
 
 - if policy(Question).create?
   = render 'shared/add_btn', id: "add_question_btn"

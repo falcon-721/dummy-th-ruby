@@ -27,6 +27,10 @@ $ ->
   addAnswerBtn = $("#add_answer_btn")
   answersList = $("#answers_list")
 
+  appendAnswer = (data) ->
+    return if $("#answer_#{data.id}")[0]?
+    answersList.append App.utils.render('answer', data)
+
   addAnswerBtn.on 'click', (e) ->
     e.preventDefault()
     answerForm.show()
@@ -36,7 +40,7 @@ $ ->
 
   answerForm.on 'ajax:success', (e, data, status, xhr) ->
     App.utils.successMessage(data?.message)
-    answersList.append App.utils.render('answer', data.answer)
+    appendAnswer data.answer
     answerForm.hide()
 
   answerForm.on 'ajax:error', App.utils.ajaxErrorHandler
@@ -71,3 +75,7 @@ $ ->
     answersList.find('.answer-best-badge').remove()
     $(e.target).closest('.answer')?.remove()
     answersList.prepend App.utils.render('answer', data.answer)
+
+  PrivatePub.subscribe "/questions/#{gon.question_id}", (data, channel) ->
+    appendAnswer data.answer
+

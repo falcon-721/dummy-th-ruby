@@ -1,0 +1,2 @@
+.collection-item id="question_#{@id}"
+  a href="/questions/#{@id}" =@title

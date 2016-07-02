@@ -1,6 +1,6 @@
 .votes.row
   .col.chip.votes-sum 0
-  - if @votable.user_id != gon.user_id
+  - if gon.user_id && (@votable.user_id != gon.user_id)
     .col.vote-up-chip
       a.vote-link.chip data-remote="true" rel="nofollow" data-method="post" href="#{@path}/vote_up"
         | Like

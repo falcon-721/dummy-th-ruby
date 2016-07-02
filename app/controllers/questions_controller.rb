@@ -40,6 +40,7 @@ class QuestionsController < ApplicationController
   def set_question
     @question = Question.find(params[:id])
     authorize @question
+    gon.question_id = @question.id
   end
 
   def publish_question

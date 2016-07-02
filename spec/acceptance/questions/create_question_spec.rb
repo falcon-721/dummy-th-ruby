@@ -37,4 +37,32 @@ feature 'create question', :js do
       expect(page).to match_expectation
     end
   end
+
+  context "multiple sessions", :faye_normal do
+    scenario "all users see new question in real-time" do
+      Capybara.using_session('author') do
+        sign_in(user)
+        visit questions_path
+      end
+
+      Capybara.using_session('guest') do
+        visit questions_path
+      end
+
+      Capybara.using_session('author') do
+        page.find("#add_question_btn").trigger('click')
+
+        fill_in 'Title', with: 'Test question'
+        fill_in 'Body', with: 'test text'
+        click_on 'Save'
+        expect(page).to have_content 'Test question'
+        expect(page).to have_content 'test text'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'Test question'
+        expect(page).to_not have_content 'No questions found('
+      end
+    end
+  end
 end
