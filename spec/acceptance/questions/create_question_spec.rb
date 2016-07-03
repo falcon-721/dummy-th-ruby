@@ -34,7 +34,7 @@ feature 'create question', :js do
   context "as guest" do
     scenario 'can not create question', :visual do
       visit questions_path
-      expect(page).to match_expectation
+      expect(page).to match_reference_screenshot
     end
   end
 

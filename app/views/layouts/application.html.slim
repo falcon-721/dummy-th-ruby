@@ -8,7 +8,7 @@ html
   body
     .navbar-fixed
       nav
-        .nav-wrapper.light-blue
+        .nav-wrapper class="#{ request.subdomains.first == 'green' ? 'light-green' : 'light-blue' }"
           = link_to 'Thinknetica Demo', root_path, class: 'brand-logo'
           ul#nav-mobile.hide-on-med-and-down.right
             - if user_signed_in?

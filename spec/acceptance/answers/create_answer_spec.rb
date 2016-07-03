@@ -40,7 +40,7 @@ feature "create answer", :js do
     background { visit question_path(question) }
 
     it "have no add button", :visual do
-      expect(page).to match_expectation
+      expect(page).to match_reference_screenshot
     end
   end
 

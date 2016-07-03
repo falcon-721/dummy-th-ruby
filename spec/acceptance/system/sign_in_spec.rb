@@ -25,6 +25,6 @@ feature 'user sign in', js: true do
 
   scenario 'show login form', :visual do
     visit new_user_session_path
-    expect(page).to match_expectation
+    expect(page).to match_reference_screenshot
   end
 end

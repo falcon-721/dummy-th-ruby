@@ -55,7 +55,7 @@ feature "edit question", :js do
 
         scenario "edit form" do
           wait_animation
-          expect(page).to match_expectation
+          expect(page).to match_reference_screenshot
         end
       end
     end

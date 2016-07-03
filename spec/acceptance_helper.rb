@@ -1,6 +1,7 @@
 require 'rails_helper'
 require 'rspec/page-regression'
 require 'capybara/poltergeist'
+require "rack_session_access/capybara"
 require "puma"
 
 RSpec.configure do |config|
@@ -11,6 +12,7 @@ RSpec.configure do |config|
   Capybara.server_port = 3001 + ENV['TEST_ENV_NUMBER'].to_i
   Capybara.default_max_wait_time = 2
   Capybara.save_and_open_page_path = "./tmp/capybara_output"
+  Capybara.always_include_port = true # for correct app_host
 
   Capybara.register_driver :poltergeist do |app|
     Capybara::Poltergeist::Driver.new(
@@ -40,6 +42,8 @@ RSpec.configure do |config|
   config.before(:each) { DatabaseCleaner.strategy = :transaction }
 
   config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
+
+  config.before(:each, type: :feature) { Capybara.app_host = "http://dev.#{Capybara.server_host}.xip.io" }
 
   config.before(:each) { DatabaseCleaner.start }
 
