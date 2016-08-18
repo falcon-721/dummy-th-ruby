@@ -20,6 +20,7 @@ gem 'devise'
 gem 'private_pub'
 gem 'puma'
 gem 'gon'
+gem 'nenv'
 
 group :development, :test do
   gem 'dev_log_in', '~> 1.1.0'

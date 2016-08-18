@@ -1,4 +1,5 @@
 require 'acceptance_helper'
+require "bg_helper" unless Nenv.skip_bg?
 
 feature "create answer", :js do
   given(:user) { create(:user) }
@@ -46,16 +47,16 @@ feature "create answer", :js do
 
   context "multiple sessions", :faye_normal do
     scenario "all users see new answer in real-time" do
-      Capybara.using_session('author') do
+      Capybara.using_session("author") do
         sign_in(user)
         visit question_path(question)
       end
 
-      Capybara.using_session('guest') do
+      Capybara.using_session("guest") do
         visit question_path(question)
       end
 
-      Capybara.using_session('author') do
+      Capybara.using_session("author") do
         page.find("#add_answer_btn").trigger('click')
 
         within "#new_answer_form" do
@@ -67,7 +68,7 @@ feature "create answer", :js do
         expect(page).to have_content "test text"
       end
 
-      Capybara.using_session('guest') do
+      Capybara.using_session("guest") do
         expect(page).to have_content "test text"
       end
     end

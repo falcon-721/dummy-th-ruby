@@ -11,7 +11,7 @@ RSpec.configure do |config|
   Capybara.server_host = "0.0.0.0"
   Capybara.server_port = 3001 + ENV['TEST_ENV_NUMBER'].to_i
   Capybara.default_max_wait_time = 2
-  Capybara.save_and_open_page_path = "./tmp/capybara_output"
+  Capybara.save_path = "./tmp/capybara_output"
   Capybara.always_include_port = true # for correct app_host
 
   Capybara.register_driver :poltergeist do |app|

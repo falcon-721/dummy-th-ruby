@@ -1,4 +1,5 @@
 require 'acceptance_helper'
+require "bg_helper" unless Nenv.skip_bg?
 
 feature 'create question', :js do
   given(:user) { create(:user) }

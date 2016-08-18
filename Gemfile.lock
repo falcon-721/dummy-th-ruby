@@ -411,6 +411,7 @@ DEPENDENCIES
   material_icons
   materialize-sass
   meta_request
+  nenv
   parallel_tests (~> 1)
   pg
   poltergeist

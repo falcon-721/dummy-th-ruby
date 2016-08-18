@@ -1,18 +1,15 @@
 module AcceptanceHelper
   def sign_in(user)
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Log in'
-    # page.set_rack_session('warden.user.user.key' => User.serialize_into_session(user).unshift("User"))
+    page.set_rack_session(
+      'warden.user.user.key' =>
+      User.serialize_into_session(user).unshift("User")
+    )
   end
 
   def save_screenshot(name = nil)
-    path = File.join(
-      Capybara.save_and_open_page_path,
-      name || "screenshot-#{Time.now.utc.iso8601.delete('-:')}.png"
-    )
+    path = name || "screenshot-#{Time.now.utc.iso8601.delete('-:')}.png"
     page.save_screenshot path
+    File.join(Capybara.save_path, path)
   end
 
   # Wait materialize-css animation completes
