@@ -1,5 +1,4 @@
 require 'acceptance_helper'
-require "bg_helper" unless Nenv.skip_bg?
 
 feature 'create question', :js do
   given(:user) { create(:user) }
@@ -33,13 +32,13 @@ feature 'create question', :js do
   end
 
   context "as guest" do
-    scenario 'can not create question', :visual do
+    xscenario 'can not create question', :visual do
       visit questions_path
       expect(page).to match_reference_screenshot
     end
   end
 
-  context "multiple sessions", :faye_normal do
+  context "multiple sessions", :cable do
     scenario "all users see new question in real-time" do
       Capybara.using_session('author') do
         sign_in(user)

@@ -21,11 +21,5 @@ class CommentsController < ApplicationController
 
   def publish_comment
     return if @comment.errors.any?
-    PrivatePub.publish_to(
-      @context.private_pub_channel,
-      type: 'comment',
-      kind: 'create',
-      comment: @comment
-    )
   end
 end

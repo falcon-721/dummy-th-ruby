@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.4'
+gem 'rails', '~> 5'
 
 gem 'pg'
 
@@ -17,7 +17,6 @@ gem 'pundit'
 gem 'active_model_serializers'
 
 gem 'devise'
-gem 'private_pub'
 gem 'puma'
 gem 'gon'
 gem 'nenv'
@@ -35,7 +34,6 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
-  gem 'quiet_assets'
   gem 'faker'
   gem 'parallel_tests', '~> 1'
 end
@@ -45,7 +43,6 @@ group :test do
   gem 'poltergeist'
   gem 'shoulda-matchers'
   gem 'capybara'
-  gem 'launchy'
   gem 'database_cleaner'
   gem 'email_spec'
   gem 'json_spec'

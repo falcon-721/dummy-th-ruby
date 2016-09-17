@@ -19,11 +19,11 @@ feature 'user sign in', js: true do
     fill_in 'Password', with: '12345678'
     click_on 'Log in'
 
-    expect(page).to have_content 'Invalid email or password.'
+    expect(page).to have_content 'Invalid Email or password.'
     expect(current_path).to eq new_user_session_path
   end
 
-  scenario 'show login form', :visual do
+  xscenario 'show login form', :visual do
     visit new_user_session_path
     expect(page).to match_reference_screenshot
   end

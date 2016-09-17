@@ -53,7 +53,7 @@ feature "edit question", :js do
       context "markup", :visual do
         given(:question) { create(:question, title: 'My question', body: 'What are you waiting for?', user: user) }
 
-        scenario "edit form" do
+        xscenario "edit form" do
           wait_animation
           expect(page).to match_reference_screenshot
         end

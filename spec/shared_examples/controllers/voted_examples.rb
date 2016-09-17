@@ -8,7 +8,7 @@ shared_examples "voted" do |votable_type|
   describe 'POST #cancel_vote' do
     let!(:vote) { create(:vote, user: user, votable: votable) }
 
-    subject { post :cancel_vote, id: votable }
+    subject { post :cancel_vote, params: { id: votable } }
 
     it 'destroy vote' do
       expect { subject }.to change(Vote, :count).by(-1)
@@ -18,7 +18,7 @@ end
 
 shared_examples "voted: create vote" do |action, delta|
 	describe "POST ##{action}" do
-    subject { post action, id: votable, format: :json }
+    subject { post action, params: { id: votable, format: :json } }
 
     it "change Votes count" do
       expect { subject }.to change(votable.votes, :count).by(1)

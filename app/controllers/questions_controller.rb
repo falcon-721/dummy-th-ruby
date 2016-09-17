@@ -45,10 +45,14 @@ class QuestionsController < ApplicationController
 
   def publish_question
     return if @question.errors.any?
-    PrivatePub.publish_to(
-      "/questions",
-      type: 'question',
-      question: @question
+    ActionCable.server.broadcast(
+      "questions",
+      {
+        question: ApplicationController.render(
+          locals: { question: @question },
+          partial: 'questions/question'
+        )
+      }
     )
   end
 end

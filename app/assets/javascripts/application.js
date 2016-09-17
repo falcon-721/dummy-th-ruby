@@ -13,7 +13,10 @@
 //= require bind-polyfill
 //= require jquery
 //= require jquery_ujs
+//= require action_cable
 //= require materialize-sprockets 
-//= require private_pub
 //= require ./shared/utils
 //= require_tree ./templates
+
+var App = App || {};
+App.cable = ActionCable.createConsumer();

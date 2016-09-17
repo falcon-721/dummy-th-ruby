@@ -14,7 +14,7 @@ describe AnswersController, :auth do
       }
     end
 
-    subject { post :create, params }
+    subject { post :create, params: params }
 
     it 'create answer for question' do
       expect { subject }.to change(question.answers, :count).by(1)
@@ -22,10 +22,6 @@ describe AnswersController, :auth do
 
     it 'create answer for user' do
       expect { subject }.to change(user.answers, :count).by(1)
-    end
-
-    it 'transmits message' do
-      expect { subject }.to transmit_to("/questions/#{question.id}")
     end
 
     it_behaves_like "invalid params", "invalid answer", model: Answer do
@@ -36,7 +32,7 @@ describe AnswersController, :auth do
   describe 'DELETE #destroy' do
     let!(:answer) { create(:answer, user: user, question: question) }
 
-    subject { delete :destroy, id: answer, format: :js }
+    subject { delete :destroy, params: { id: answer, format: :js } }
 
     it 'delete answer' do
       expect { subject }.to change(Answer, :count).by(-1)
@@ -57,7 +53,7 @@ describe AnswersController, :auth do
       { id: answer, format: :js, answer: form_params }
     end
 
-    subject { patch :update, params }
+    subject { patch :update, params: params }
 
     it 'change answer' do
       subject
@@ -78,7 +74,7 @@ describe AnswersController, :auth do
     let(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, question: question) }
 
-    subject { post :best, id: answer, format: :js }
+    subject { post :best, params: { id: answer, format: :js } }
 
     it "change best status" do
       subject

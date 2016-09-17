@@ -7,7 +7,7 @@ describe QuestionsController, :auth do
     render_views
 
     specify do
-      get :show, id: question
+      get :show, params: { id: question }
       expect(response).to be_success
     end
   end
@@ -15,14 +15,10 @@ describe QuestionsController, :auth do
   describe "POST #create" do
     let(:form_params) { {} }
     let(:params) { { question: attributes_for(:question).merge(form_params) } }
-    subject { post :create, params }
+    subject { post :create, params: params }
 
     it "creates new question" do
       expect { subject }.to change(user.questions, :count).by(1)
-    end
-
-    it 'transmits message' do
-      expect { subject }.to transmit_to('/questions')
     end
 
     it_behaves_like "invalid params", "empty title", model: Question do
@@ -37,7 +33,7 @@ describe QuestionsController, :auth do
   describe 'DELETE #destroy' do
     let!(:question) { create(:question, user: user) }
 
-    subject { delete :destroy, id: question }
+    subject { delete :destroy, params: { id: question } }
 
     it "destroys question" do
       expect { subject }.to change(Question, :count).by(-1)
@@ -51,7 +47,7 @@ describe QuestionsController, :auth do
   describe 'PATCH #update' do
     let(:form_params) { { title: 'Edited title', body: 'Edited body' } }
     let(:params) { { id: question, question: form_params } }
-    subject { patch :update, params }
+    subject { patch :update, params: params }
 
     it 'changes title and body', :aggregate_failures do
       subject

@@ -16,6 +16,14 @@ $ ->
 
   questionForm.on 'ajax:error', App.utils.ajaxErrorHandler
 
-  PrivatePub.subscribe "/questions", (data, channel) ->
-    questionsList.empty() unless questionsList.find('.collection-item').length
-    questionsList.append App.utils.render('question', data.question)
+  App.cable.subscriptions.create "QuestionsChannel", {
+    connected: ->
+      @follow()
+
+    follow: ->
+      @perform 'follow'
+
+    received: (data) ->
+      questionsList.empty() unless questionsList.find('.collection-item').length
+      questionsList.append data['question']
+  }

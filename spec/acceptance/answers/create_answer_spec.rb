@@ -1,5 +1,4 @@
 require 'acceptance_helper'
-require "bg_helper" unless Nenv.skip_bg?
 
 feature "create answer", :js do
   given(:user) { create(:user) }
@@ -40,12 +39,12 @@ feature "create answer", :js do
 
     background { visit question_path(question) }
 
-    it "have no add button", :visual do
+    xit "have no add button", :visual do
       expect(page).to match_reference_screenshot
     end
   end
 
-  context "multiple sessions", :faye_normal do
+  context "multiple sessions", :cable do
     scenario "all users see new answer in real-time" do
       Capybara.using_session("author") do
         sign_in(user)

@@ -12,12 +12,16 @@ Dir[Rails.root.join("spec/shared_examples/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
-PrivatePub.fake!
+# Setup ActionCable test adapter
+server = ActionCable.server
+test_adapter = ActionCable::SubscriptionAdapter::Test.new(server)
+server.instance_variable_set(:@pubsub, test_adapter)
+
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -28,7 +32,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.after(:each) do
-    PrivatePub.cleanup_testing
+    ActionCable.server.pubsub.try(:reset!)
   end
 
   config.after(:suite) do

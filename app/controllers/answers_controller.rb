@@ -46,10 +46,6 @@ class AnswersController < ApplicationController
 
   def publish_answer
     return if @answer.errors.any?
-    PrivatePub.publish_to(
-      "/questions/#{@question.id}",
-      type: 'answer',
-      answer: @answer
-    )
+    ActionCable.server.broadcast "questions/#{@answer.question_id}/answers", @answer
   end
 end

@@ -1,6 +1,6 @@
 require 'acceptance_helper'
 
-feature 'subdomains', :js do
+xfeature 'subdomains', :js do
   scenario "visit subdomains", :visual do
     visit questions_path
     expect(page).to match_reference_screenshot label: 'default'

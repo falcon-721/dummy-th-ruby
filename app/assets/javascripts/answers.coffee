@@ -76,6 +76,15 @@ $ ->
     $(e.target).closest('.answer')?.remove()
     answersList.prepend App.utils.render('answer', data.answer)
 
-  PrivatePub.subscribe "/questions/#{gon.question_id}", (data, channel) ->
-    appendAnswer data.answer
+  App.cable.subscriptions.create "AnswersChannel", {
+    connected: ->
+      @follow()
+
+    follow: ->
+      return unless gon.question_id
+      @perform 'follow', id: gon.question_id
+
+    received: (data) ->
+      appendAnswer(data)
+  }
 

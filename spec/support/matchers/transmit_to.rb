@@ -4,15 +4,11 @@ RSpec::Matchers.define :transmit_to do |channel, count = 1|
   match do |actual|
     raise ArgumentError("Supports only block") unless actual.is_a? Proc
 
-    res = false
-
-    PrivatePub.switch_mode(:test) do
-      old_size = (PrivatePub.testing_mailbox.channels[channel] || []).size
-      actual.call
-      new_size = (PrivatePub.testing_mailbox.channels[channel] || []).size
-      res = ((new_size - old_size) == count)
-    end
-    res
+    old_size = (ActionCable.server.pubsub.transmissions[channel] || []).size
+    actual.call
+    new_size = (ActionCable.server.pubsub.transmissions[channel] || []).size
+    
+    (new_size - old_size) == count
   end
 
   description do

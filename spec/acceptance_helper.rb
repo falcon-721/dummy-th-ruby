@@ -39,7 +39,7 @@ RSpec.configure do |config|
 
   config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
 
-  config.before(:each, type: :feature) { Capybara.app_host = "http://dev.#{Capybara.server_host}.xip.io" }
+  # config.before(:each, type: :feature) { Capybara.app_host = "http://dev.#{Capybara.server_host}.xip.io" }
 
   config.before(:each) { DatabaseCleaner.start }
 
