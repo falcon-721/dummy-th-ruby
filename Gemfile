@@ -54,6 +54,9 @@ end
 group :development do
   gem 'rubocop', require: false
   gem 'rubocop-rspec', require: false
+  gem 'flay', require: false
+  gem 'reek', require: false
+
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'guard-bundler', require: false
