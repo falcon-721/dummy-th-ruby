@@ -1,0 +1,11 @@
+.git/*
+.bundle/*
+log/*
+tmp/*
+
+Dockerfile
+README.md
+Guardfile
+.travis.yml
+.todo.reek
+.rubocop.yml

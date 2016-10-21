@@ -1,0 +1,15 @@
+app:
+  build: .
+  command: rails server -b '0.0.0.0'
+  volumes:
+    - .:/app
+  ports:
+    - "3002:3000"
+  environment:
+    - POSTGRES_USER=postgres
+  links:
+    - postgres
+postgres:
+  image: postgres:9.6
+  ports:
+    - "5432"
