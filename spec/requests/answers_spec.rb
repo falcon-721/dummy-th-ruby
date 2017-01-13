@@ -3,18 +3,16 @@ require 'rails_helper'
 describe AnswersController, :auth do
   let(:question) { create(:question) }
 
-  describe "POST #create" do
+  describe "POST /answers" do
     let(:form_params) { {} }
 
     let(:params) do
       {
-        question_id: question,
-        answer: attributes_for(:answer).merge(form_params),
-        format: :js 
+        answer: attributes_for(:answer).merge(form_params)
       }
     end
 
-    subject { post :create, params: params }
+    let(:request) { post "/questions/#{question.id}/answers.json", params: params }
 
     it 'create answer for question' do
       expect { subject }.to change(question.answers, :count).by(1)
@@ -32,7 +30,7 @@ describe AnswersController, :auth do
   describe 'DELETE #destroy' do
     let!(:answer) { create(:answer, user: user, question: question) }
 
-    subject { delete :destroy, params: { id: answer, format: :js } }
+    let(:request) { delete "/answers/#{answer.id}.json" }
 
     it 'delete answer' do
       expect { subject }.to change(Answer, :count).by(-1)
@@ -48,10 +46,10 @@ describe AnswersController, :auth do
 
     let(:form_params) { { body: 'updated body'} }
     let(:params) do
-      { id: answer, format: :js, answer: form_params }
+      { answer: form_params }
     end
 
-    subject { patch :update, params: params }
+    let(:request) { patch "/answers/#{answer.id}.json", params: params }
 
     it 'change answer' do
       subject
@@ -72,7 +70,7 @@ describe AnswersController, :auth do
     let(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, question: question) }
 
-    subject { post :best, params: { id: answer, format: :js } }
+    subject { post "/answers/#{answer.id}/best.js" }
 
     it "change best status" do
       subject
@@ -91,5 +89,5 @@ describe AnswersController, :auth do
     end
   end
 
-  it_behaves_like "voted", :answer
+  it_behaves_like "voted_requests", 'answer'
 end

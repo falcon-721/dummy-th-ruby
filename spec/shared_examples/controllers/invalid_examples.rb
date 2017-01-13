@@ -1,13 +1,11 @@
 shared_examples "invalid params" do |message, model: nil, code: 403|
 	context message do
-		if model
-			it "doesn't create #{model}" do
+		it "fails" do
+			if model
 				expect { subject }.not_to change(model, :count)
 			end
-		end
 
-		if code
-			it "returns #{code}" do
+			if code
 				expect(subject).to have_http_status(code)
 			end
 		end

@@ -21,7 +21,8 @@ class ApplicationController < ActionController::Base
   def permission_error
     respond_to do |format|
       format.html { redirect_to root_path, alert: 'Access denied' }
-      format.any { render status: :forbidden, plain: 'Access denied' }
+      format.js { render status: :forbidden, plain: 'Access denied' }
+      format.json { render status: :forbidden, plain: 'Access denied' }
     end
   end
 end

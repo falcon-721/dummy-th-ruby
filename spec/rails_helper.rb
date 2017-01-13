@@ -17,11 +17,20 @@ server = ActionCable.server
 test_adapter = ActionCable::SubscriptionAdapter::Test.new(server)
 server.instance_variable_set(:@pubsub, test_adapter)
 
+module RSpecBenchWorld
+  def ordered_example_groups
+    @example_groups = @example_groups * Nenv.bench.to_i
+    super
+  end
+end
+
+RSpec::Core::World.prepend(RSpecBenchWorld) if Nenv.bench?
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
