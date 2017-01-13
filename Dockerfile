@@ -1,4 +1,4 @@
-FROM ruby:2.3
+FROM ruby:2.4
 MAINTAINER palkan_tula@mail.ru
 
 RUN apt-get update && apt-get install -y build-essential
@@ -11,8 +11,12 @@ RUN npm install -g phantomjs
 RUN mkdir -p /app 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./ 
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+ENV LANG C.UTF-8
+ENV BUNDLE_PATH /bundle
+ENV BUNDLE_BIN /bundle/bin
+ENV PATH /bundle/bin:$PATH
+
+RUN gem install bundler
 
 EXPOSE 3000
 
