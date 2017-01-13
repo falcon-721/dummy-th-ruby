@@ -9,6 +9,8 @@ class Answer < ApplicationRecord
 
   default_scope -> { order(best: :desc) }
 
+  scope :best, -> { where(best: true) }
+
   def make_best
     ActiveRecord::Base.transaction do
       question.answers.update_all(best: false)

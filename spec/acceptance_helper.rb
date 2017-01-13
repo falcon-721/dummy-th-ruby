@@ -46,7 +46,7 @@ RSpec.configure do |config|
   config.after(:each) { Timecop.return }
 
   config.append_after(:each) do
-    # Capybara.reset_sessions!
+    Capybara.reset_sessions!
     DatabaseCleaner.clean
   end
 end

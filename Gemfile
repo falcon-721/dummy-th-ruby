@@ -17,7 +17,7 @@ gem 'pundit'
 gem 'active_model_serializers'
 
 gem 'devise'
-gem 'puma'
+gem 'puma', '3.6.0'
 gem 'gon'
 gem 'nenv'
 
@@ -43,7 +43,7 @@ group :test do
   gem 'rspec-rails'
   gem 'poltergeist'
   gem 'shoulda-matchers'
-  gem 'capybara'
+  gem 'capybara', '2.10.1'
   gem 'database_cleaner'
   gem 'email_spec'
   gem 'json_spec'

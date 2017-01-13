@@ -29,9 +29,6 @@ module Sof
     .map { |i| File.basename(i).sub(/(\.css)?\.(sass|scss)$/, '.css') }
     .reject { |i| i =~ /^application\.(js|css)$/ }
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.generators do |g|
       g.test_framework :rspec,
                        fixtures: true,
