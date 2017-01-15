@@ -44,7 +44,6 @@ group :test do
   gem 'poltergeist'
   gem 'shoulda-matchers'
   gem 'capybara', '2.10.1'
-  gem 'database_cleaner'
   gem 'email_spec'
   gem 'json_spec'
   gem 'fuubar'

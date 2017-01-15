@@ -4,6 +4,32 @@ require 'capybara/poltergeist'
 require "rack_session_access/capybara"
 require "puma"
 
+module OneConnection
+  class << self
+    attr_accessor :connection
+  end
+
+  module Connection
+    def connection
+      OneConnection.connection || super
+    end
+  end
+
+  module Ext
+    extend ActiveSupport::Concern
+
+    included do
+      class << self
+        prepend OneConnection::Connection
+      end
+    end
+  end
+end
+
+OneConnection.connection = ActiveRecord::Base.connection
+
+ActiveRecord::Base.send(:include, OneConnection::Ext)
+
 RSpec.configure do |config|
   include ActionView::RecordIdentifier
   config.include AcceptanceHelper, type: :feature
@@ -31,22 +57,11 @@ RSpec.configure do |config|
     c.threshold = 0.01
   end
 
-  config.use_transactional_fixtures = false
-
-  config.before(:suite) { DatabaseCleaner.clean_with :truncation }
-
-  config.before(:each) { DatabaseCleaner.strategy = :transaction }
-
-  config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
-
   # config.before(:each, type: :feature) { Capybara.app_host = "http://dev.#{Capybara.server_host}.xip.io" }
-
-  config.before(:each) { DatabaseCleaner.start }
 
   config.after(:each) { Timecop.return }
 
   config.append_after(:each) do
     Capybara.reset_sessions!
-    DatabaseCleaner.clean
   end
 end

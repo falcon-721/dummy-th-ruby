@@ -96,7 +96,6 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
-    database_cleaner (1.5.3)
     debug_inspector (0.0.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -408,7 +407,6 @@ DEPENDENCIES
   binding_of_caller
   capybara (= 2.10.1)
   coffee-rails (~> 4.1.0)
-  database_cleaner
   dev_log_in (~> 1.1.0)
   devise
   email_spec
