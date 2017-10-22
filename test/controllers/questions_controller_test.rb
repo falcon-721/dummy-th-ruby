@@ -3,6 +3,8 @@ require 'test_helper'
 require_relative './shared/voted_controller'
 
 class QuestionsControllerTest < ActionDispatch::IntegrationTest
+  include ActionCable::TestHelper
+
   class ShowQuestionTest < self
     test "show quesion" do
       question = create(:question)
@@ -22,6 +24,12 @@ class QuestionsControllerTest < ActionDispatch::IntegrationTest
   class CreateQuestionTest < AuthTest
     test "creates new question" do
       assert_difference -> { @user.questions.count }, 1 do
+        post questions_path, params: { question: attributes_for(:question) }
+      end
+    end
+
+    test "broadcasts a message" do
+      assert_broadcasts "questions", 1 do
         post questions_path, params: { question: attributes_for(:question) }
       end
     end
