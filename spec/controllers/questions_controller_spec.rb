@@ -21,6 +21,13 @@ describe QuestionsController, :auth do
       expect { subject }.to change(user.questions, :count).by(1)
     end
 
+    it "transmits question" do
+      form_params[:title] = "cable question"
+      expect { subject }.to broadcast_to("questions").with { |data|
+        expect(data['question']).to match /cable question/
+      }
+    end
+
     it_behaves_like "invalid params", "empty title", model: Question do
       let(:form_params) { { title: '' } }
     end

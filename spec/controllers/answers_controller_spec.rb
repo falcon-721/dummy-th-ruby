@@ -24,6 +24,12 @@ describe AnswersController, :auth do
       expect { subject }.to change(user.answers, :count).by(1)
     end
 
+    it "transmits answer" do
+      form_params[:body] = "cable answer"
+      expect { subject }.to broadcast_to("questions/#{question.id}/answers").
+        with(a_hash_including(body: 'cable answer'))
+    end
+
     it_behaves_like "invalid params", "invalid answer", model: Answer do
       let(:form_params) { attributes_for(:invalid_answer) }
     end
