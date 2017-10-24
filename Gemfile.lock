@@ -12,7 +12,7 @@ GIT
 PATH
   remote: ../action-cable-testing
   specs:
-    action-cable-testing (0.0.7)
+    action-cable-testing (0.1.0)
       actioncable (~> 5.0)
 
 GEM

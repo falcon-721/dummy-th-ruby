@@ -12,11 +12,6 @@ Dir[Rails.root.join("spec/shared_examples/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
-# Setup ActionCable test adapter
-server = ActionCable.server
-test_adapter = ActionCable::SubscriptionAdapter::Test.new(server)
-server.instance_variable_set(:@pubsub, test_adapter)
-
 module RSpecBenchWorld
   def ordered_example_groups
     @example_groups = @example_groups * Nenv.bench.to_i
