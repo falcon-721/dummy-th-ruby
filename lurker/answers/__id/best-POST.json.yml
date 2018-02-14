@@ -1,0 +1,56 @@
+---
+description: answer
+prefix: answers management
+requestParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties: {}
+responseCodes:
+- status: 200
+  successful: true
+  description: ''
+responseParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties:
+    answer:
+      description: ''
+      type: object
+      additionalProperties: false
+      required: []
+      properties:
+        id:
+          description: ''
+          type: integer
+          example: 797
+        body:
+          description: ''
+          type: string
+          example: Magni amet vel possimus temporibus rerum.
+        user_id:
+          description: ''
+          type: integer
+          example: 2989
+        question_id:
+          description: ''
+          type: integer
+          example: 1521
+        best:
+          description: ''
+          type: boolean
+          example: true
+    message:
+      description: ''
+      type: string
+      example: You have successfully chosen the best answer
+extensions:
+  method: POST
+  path_info: "/answers/797/best.js"
+  path_params:
+    controller: answers
+    action: best
+    id: '797'

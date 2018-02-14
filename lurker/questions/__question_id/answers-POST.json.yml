@@ -1,0 +1,66 @@
+---
+description: answer creation
+prefix: answers management
+requestParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties:
+    answer:
+      description: ''
+      type: object
+      additionalProperties: false
+      required: []
+      properties:
+        body:
+          description: ''
+          type: string
+          example: Numquam omnis officiis exercitationem veniam quibusdam ullam qui.
+responseCodes:
+- status: 200
+  successful: true
+  description: ''
+responseParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties:
+    answer:
+      description: ''
+      type: object
+      additionalProperties: false
+      required: []
+      properties:
+        id:
+          description: ''
+          type: integer
+          example: 814
+        body:
+          description: ''
+          type: string
+          example: Numquam omnis officiis exercitationem veniam quibusdam ullam qui.
+        user_id:
+          description: ''
+          type: integer
+          example: 3033
+        question_id:
+          description: ''
+          type: integer
+          example: 1538
+        best:
+          description: ''
+          type: boolean
+          example: false
+    message:
+      description: ''
+      type: string
+      example: Your answer has been successfully created
+extensions:
+  method: POST
+  path_info: "/questions/1538/answers.json"
+  path_params:
+    controller: answers
+    action: create
+    question_id: '1538'

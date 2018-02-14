@@ -5,6 +5,8 @@ require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'spec_helper'
 require 'action_cable/testing/rspec'
+require 'rspec/rails'
+require 'lurker/spec_helper'
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 Dir[Rails.root.join("spec/shared_contexts/**/*.rb")].each { |f| require f }

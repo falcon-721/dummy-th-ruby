@@ -14,7 +14,7 @@ describe AnswersController, :auth do
 
     let(:request) { post "/questions/#{question.id}/answers.json", params: params }
 
-    it 'create answer for question' do
+    it 'create answer for question', :lurker do
       expect { subject }.to change(question.answers, :count).by(1)
     end
 
@@ -32,7 +32,7 @@ describe AnswersController, :auth do
 
     let(:request) { delete "/answers/#{answer.id}.json" }
 
-    it 'delete answer' do
+    it 'delete answer', :lurker do
       expect { subject }.to change(Answer, :count).by(-1)
     end
 
@@ -51,7 +51,7 @@ describe AnswersController, :auth do
 
     let(:request) { patch "/answers/#{answer.id}.json", params: params }
 
-    it 'change answer' do
+    it 'change answer', :lurker do
       subject
       answer.reload
       expect(answer.body).to eq 'updated body'
@@ -72,7 +72,7 @@ describe AnswersController, :auth do
 
     subject { post "/answers/#{answer.id}/best.js" }
 
-    it "change best status" do
+    it "change best status", :lurker do
       subject
       answer.reload
       expect(answer.best).to be true

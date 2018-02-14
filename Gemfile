@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5'
+gem 'rails', '~> 5.1.0'
 
 gem 'pg'
 
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.1.0'
+gem 'sass-rails'
+gem 'uglifier'
+gem 'coffee-rails'
 gem 'slim-rails'
 gem 'jquery-rails'
 gem 'materialize-sass'
@@ -24,6 +24,8 @@ gem 'nenv'
 group :development, :test do
   gem 'dev_log_in', '~> 1.1.0'
   gem 'launchy'
+ 
+  gem 'snip_snip'
 
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -51,6 +53,7 @@ group :test do
   gem 'rack_session_access'
   gem 'test-prof'
   gem 'action-cable-testing', path: '../action-cable-testing'
+  gem 'lurker', path: '../lurker'
 end
 
 group :development do

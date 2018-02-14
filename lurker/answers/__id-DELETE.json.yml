@@ -1,0 +1,30 @@
+---
+description: answer descruction
+prefix: answers management
+requestParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties: {}
+responseCodes:
+- status: 200
+  successful: true
+  description: ''
+responseParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties:
+    message:
+      description: ''
+      type: string
+      example: Your answer has been successfully removed
+extensions:
+  method: DELETE
+  path_info: "/answers/799.json"
+  path_params:
+    controller: answers
+    action: destroy
+    id: '799'

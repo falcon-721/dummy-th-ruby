@@ -1,0 +1,66 @@
+---
+description: answer updating
+prefix: answers management
+requestParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties:
+    answer:
+      description: ''
+      type: object
+      additionalProperties: false
+      required: []
+      properties:
+        body:
+          description: ''
+          type: string
+          example: updated body
+responseCodes:
+- status: 200
+  successful: true
+  description: ''
+responseParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties:
+    answer:
+      description: ''
+      type: object
+      additionalProperties: false
+      required: []
+      properties:
+        id:
+          description: ''
+          type: integer
+          example: 801
+        body:
+          description: ''
+          type: string
+          example: updated body
+        user_id:
+          description: ''
+          type: integer
+          example: 2998
+        question_id:
+          description: ''
+          type: integer
+          example: 1525
+        best:
+          description: ''
+          type: boolean
+          example: false
+    message:
+      description: ''
+      type: string
+      example: Your answer has been successfully updated
+extensions:
+  method: PATCH
+  path_info: "/answers/801.json"
+  path_params:
+    controller: answers
+    action: update
+    id: '801'

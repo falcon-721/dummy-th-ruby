@@ -1,0 +1,42 @@
+---
+description: answer
+prefix: answers management
+requestParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties: {}
+responseCodes:
+- status: 200
+  successful: true
+  description: ''
+responseParameters:
+  description: ''
+  type: object
+  additionalProperties: false
+  required: []
+  properties:
+    total:
+      description: ''
+      type: integer
+      example: -1
+    is_voted:
+      description: ''
+      type: boolean
+      example: true
+    votable_id:
+      description: ''
+      type: integer
+      example: 809
+    votable_type:
+      description: ''
+      type: string
+      example: Answer
+extensions:
+  method: POST
+  path_info: "/answers/809/vote_down.json"
+  path_params:
+    controller: answers
+    action: vote_down
+    id: '809'
